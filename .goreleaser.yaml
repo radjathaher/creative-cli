@@ -1,0 +1,37 @@
+version: 2
+
+project_name: creative-cli
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: creative
+    binary: creative
+    main: .
+    env:
+      - CGO_ENABLED=0
+    goos: [darwin, linux]
+    goarch: [amd64, arm64]
+    ldflags:
+      - -s -w
+
+archives:
+  - id: creative
+    ids: [creative]
+    # Match the naming the Nix derivations expect:
+    # creative-cli-<version>-<os>-<aarch64|x86_64>.tar.gz, binary at archive root.
+    name_template: >-
+      creative-cli-{{ .Version }}-{{ .Os }}-{{ if eq .Arch "arm64" }}aarch64{{ else if eq .Arch "amd64" }}x86_64{{ else }}{{ .Arch }}{{ end }}
+    formats: [tar.gz]
+    files:
+      - none*
+
+checksum:
+  name_template: checksums.txt
+
+release:
+  github:
+    owner: radjathaher
+    name: creative-cli

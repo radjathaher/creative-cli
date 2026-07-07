@@ -1,0 +1,65 @@
+package cmd
+
+import (
+	"fmt"
+
+	"github.com/radjathaher/creative-cli/internal/core"
+	"github.com/radjathaher/creative-cli/internal/provider/segmind"
+	"github.com/spf13/cobra"
+)
+
+func init() {
+	register(func(root *cobra.Command) {
+		c := &cobra.Command{
+			Use:   "video",
+			Short: "Generate a video via Segmind Seedance 2.0 (text, image, or video-to-video).",
+			Args:  cobra.NoArgs,
+			RunE:  runVideo,
+		}
+		c.Flags().String("prompt", "", "text prompt (required)")
+		c.Flags().String("model", "mini", "mini | fast | standard")
+		addRefFlags(c)
+		c.Flags().String("first-frame", "", "starting frame image (path or url); cannot combine with --image")
+		c.Flags().String("last-frame", "", "ending frame image (path or url); requires --first-frame")
+		c.Flags().Int("duration-seconds", 5, "requested video duration in seconds")
+		c.Flags().String("resolution", "720p", "480p | 720p | 1080p | 4k")
+		c.Flags().String("aspect-ratio", "16:9", "output aspect ratio, e.g. 16:9, 9:16, 1:1")
+		c.Flags().Bool("no-generate-audio", false, "disable provider-generated synchronized audio")
+		c.Flags().Int("seed", -1, "seed; -1 lets the provider choose")
+		addOutFlag(c)
+		addAsyncFlags(c)
+		addProviderFlag(c, "segmind")
+		root.AddCommand(c)
+	})
+}
+
+func runVideo(cmd *cobra.Command, _ []string) error {
+	common := readCommon(cmd)
+	prompt := flagStr(cmd, "prompt")
+	if prompt == "" {
+		return fmt.Errorf("--prompt is required")
+	}
+
+	env, raw, err := segmind.Generate(segmind.GenerateOpts{
+		Prompt:           prompt,
+		Model:            flagStr(cmd, "model"),
+		Images:           flagStrs(cmd, "image"),
+		Videos:           flagStrs(cmd, "video"),
+		Audios:           flagStrs(cmd, "audio"),
+		FirstFrame:       flagStr(cmd, "first-frame"),
+		LastFrame:        flagStr(cmd, "last-frame"),
+		Duration:         flagInt(cmd, "duration-seconds"),
+		Resolution:       flagStr(cmd, "resolution"),
+		AspectRatio:      flagStr(cmd, "aspect-ratio"),
+		GenerateAudio:    !flagBool(cmd, "no-generate-audio"),
+		Seed:             flagInt(cmd, "seed"),
+		Out:              flagStr(cmd, "out"),
+		NoWait:           flagBool(cmd, "no-wait"),
+		PollIntervalSecs: flagInt(cmd, "poll-interval-secs"),
+		MaxWaitSecs:      flagInt(cmd, "max-wait-secs"),
+	}, common.pretty, common.raw)
+	if err != nil {
+		return err
+	}
+	return core.Emit(env, raw, common.pretty, common.raw)
+}
