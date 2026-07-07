@@ -1,0 +1,6 @@
+/creative
+/dist
+/target
+*.tmp
+.env
+.DS_Store
