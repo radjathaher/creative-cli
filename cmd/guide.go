@@ -22,7 +22,7 @@ MENTAL MODEL
 
     MAKE                              TRANSFORM                    ANALYZE
     creative image    text->image     creative upscale  video->    creative transcribe audio/video->text
-    creative video    text/ref->video creative caption  burn text  creative understand video->brief
+    creative video    text/ref->video creative caption  burn text  creative analyze    video->brief
     creative speech   text->voiceover creative dub      re-language
     creative music    text->music
     creative sfx      text->sound fx
@@ -39,7 +39,7 @@ VERB CATALOG (default provider · required credential)
   caption    fal->VEED (default)       FAL_KEY | ZAPCAP_*  INPUT; --provider veed|zapcap
   dub        ElevenLabs                ELEVENLABS_API_KEY  INPUT --language <iso>
   transcribe OpenAI Whisper            OPENAI_API_KEY      INPUT; --format text|srt|vtt|json|verbose-json
-  understand fal->OpenRouter->Gemini   FAL_KEY             INPUT (video/YouTube url) -> recreation brief
+  analyze    fal->OpenRouter->Gemini   FAL_KEY             INPUT (video/YouTube url) -> recreation brief
 
 CREDENTIALS  (resolved: env var first, then /run/secrets/<NAME>)
   OPENAI_API_KEY  SEGMIND_API_KEY  ELEVENLABS_API_KEY  FAL_KEY  ZAPCAP_API_KEY
@@ -52,7 +52,7 @@ OUTPUT CONTRACT
   stderr: human progress (upload / queued / polling / done in Xs).
   Binary assets (image/audio/video) require --out. Text results print to stdout
   (inside output) or write to --out.
-  Async verbs (video, upscale, caption, dub, understand) accept
+  Async verbs (video, upscale, caption, dub, analyze) accept
   --poll-interval-secs, --max-wait-secs, and --no-wait (submit only, returns request_id).
 
 DAG PIPELINE RECIPES (chain verbs; feed one --out into the next input)
@@ -73,7 +73,7 @@ DAG PIPELINE RECIPES (chain verbs; feed one --out into the next input)
     creative caption clip_4k.mp4 --out final.mp4
 
   Study a viral reference, then recreate it:
-    creative understand https://youtube.com/watch?v=... --out brief.json
+    creative analyze https://youtube.com/watch?v=... --out brief.json
     # use the brief as the --prompt basis for creative video
 
   Sound design bed:

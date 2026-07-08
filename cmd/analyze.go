@@ -9,10 +9,10 @@ import (
 func init() {
 	register(func(root *cobra.Command) {
 		c := &cobra.Command{
-			Use:   "understand <video>",
-			Short: "Describe a video as a recreation brief via fal's openrouter/router/video (Gemini).",
+			Use:   "analyze <video>",
+			Short: "Analyze a video into a recreation brief via fal's openrouter/router/video (Gemini).",
 			Args:  cobra.ExactArgs(1),
-			RunE:  runUnderstand,
+			RunE:  runAnalyze,
 		}
 		c.Flags().String("model", "google/gemini-2.5-flash", "OpenRouter model id")
 		c.Flags().Float64("temperature", 1.0, "sampling temperature (0-2)")
@@ -23,10 +23,10 @@ func init() {
 	})
 }
 
-func runUnderstand(cmd *cobra.Command, args []string) error {
+func runAnalyze(cmd *cobra.Command, args []string) error {
 	common := readCommon(cmd)
 	temperature, _ := cmd.Flags().GetFloat64("temperature")
-	env, raw, err := falpipe.Understand(falpipe.UnderstandOpts{
+	env, raw, err := falpipe.Analyze(falpipe.AnalyzeOpts{
 		Input:            args[0],
 		Model:            flagStr(cmd, "model"),
 		Temperature:      temperature,

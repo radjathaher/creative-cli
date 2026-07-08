@@ -10,13 +10,13 @@ import (
 	"github.com/radjathaher/creative-cli/internal/fal"
 )
 
-// understandEndpoint is fal's OpenRouter video-understanding route: it forwards
-// the resolved video plus a text prompt to a Gemini model and returns the
-// model's textual answer under result["output"].
-const understandEndpoint = "openrouter/router/video"
+// analyzeEndpoint is fal's OpenRouter video-understanding route: it forwards the
+// resolved video plus a text prompt to a Gemini model and returns the model's
+// textual answer under result["output"].
+const analyzeEndpoint = "openrouter/router/video"
 
-// UnderstandOpts configures a video-understanding (recreation brief) job.
-type UnderstandOpts struct {
+// AnalyzeOpts configures a video-analysis (recreation brief) job.
+type AnalyzeOpts struct {
 	Input            string
 	Model            string // OpenRouter model id, e.g. google/gemini-2.5-flash
 	Temperature      float64
@@ -27,10 +27,10 @@ type UnderstandOpts struct {
 	MaxWaitSecs      int
 }
 
-// Understand resolves the video (local file, http url, or YouTube url passed
+// Analyze resolves the video (local file, http url, or YouTube url passed
 // through untouched), asks Gemini via fal's OpenRouter route for a detailed
 // video-recreation brief, and returns the brief in the result envelope.
-func Understand(o UnderstandOpts, pretty, raw bool) (*core.Envelope, json.RawMessage, error) {
+func Analyze(o AnalyzeOpts, pretty, raw bool) (*core.Envelope, json.RawMessage, error) {
 	client, err := fal.New()
 	if err != nil {
 		return nil, nil, err
@@ -42,20 +42,20 @@ func Understand(o UnderstandOpts, pretty, raw bool) (*core.Envelope, json.RawMes
 	}
 	body := map[string]any{
 		"video_urls":  []string{input.ResolvedURL},
-		"prompt":      buildUnderstandPrompt(o.Prompt),
+		"prompt":      buildAnalyzePrompt(o.Prompt),
 		"model":       o.Model,
 		"temperature": o.Temperature,
 		"max_tokens":  o.MaxOutputTokens,
 	}
-	core.Progress("understanding video with %s", o.Model)
-	qref, qraw, err := client.Submit(understandEndpoint, body)
+	core.Progress("analyzing video with %s", o.Model)
+	qref, qraw, err := client.Submit(analyzeEndpoint, body)
 	if err != nil {
 		return nil, qraw, err
 	}
 
 	env := &core.Envelope{
 		Provider:  "fal-openrouter-video",
-		Endpoint:  understandEndpoint,
+		Endpoint:  analyzeEndpoint,
 		RequestID: qref.RequestID,
 		Model:     o.Model,
 		Input:     &input,
@@ -86,10 +86,10 @@ func Understand(o UnderstandOpts, pretty, raw bool) (*core.Envelope, json.RawMes
 	return env, resraw, nil
 }
 
-// buildUnderstandPrompt instructs Gemini to return a plain-text brief detailed
+// buildAnalyzePrompt instructs Gemini to return a plain-text brief detailed
 // enough to recreate the source video in another AI video tool; a non-empty
 // extra instruction is appended verbatim.
-func buildUnderstandPrompt(extra string) string {
+func buildAnalyzePrompt(extra string) string {
 	prompt := "Create a detailed video recreation brief from this video. Return only the brief text, not JSON. Include scene/timestamp notes, camera framing and motion, subjects and actions, on-screen text, audio or spoken content, pacing, transitions, visual style, and enough concrete detail to recreate the same video in another AI video tool."
 	if e := strings.TrimSpace(extra); e != "" {
 		prompt += "\n\nExtra instruction: " + e

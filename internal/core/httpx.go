@@ -9,7 +9,7 @@ import (
 )
 
 // Version is stamped into the User-Agent and reported by `creative --version`.
-const Version = "0.1.0"
+const Version = "0.1.1"
 
 // UserAgent identifies the CLI to upstream providers.
 func UserAgent() string { return "creative-cli/" + Version }

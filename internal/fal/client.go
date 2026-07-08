@@ -1,5 +1,5 @@
 // Package fal implements the shared fal.ai queue + storage client used by the
-// upscale, caption (VEED), and understand verbs. It is a faithful Go port of the
+// upscale, caption (VEED), and analyze verbs. It is a faithful Go port of the
 // core that the sibling Rust CLIs (fal-cli, upscale-cli, storyboard-cli) each
 // copy-pasted, consolidated here so the logic lives in exactly one place.
 package fal

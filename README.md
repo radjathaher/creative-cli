@@ -33,7 +33,7 @@ go build -o creative .
 | `creative caption` | fal→VEED | `FAL_KEY` / `ZAPCAP_API_KEY` | burn subtitles onto video |
 | `creative dub` | ElevenLabs | `ELEVENLABS_API_KEY` | re-language a video |
 | `creative transcribe` | OpenAI Whisper | `OPENAI_API_KEY` | audio/video→text |
-| `creative understand` | fal→Gemini | `FAL_KEY` | video→recreation brief |
+| `creative analyze` | fal→Gemini | `FAL_KEY` | video→recreation brief |
 
 Credentials resolve from the environment first, then `/run/secrets/<NAME>` — the
 same convention every sibling CLI uses.
@@ -49,7 +49,7 @@ same convention every sibling CLI uses.
 ```
 
 `--pretty` indents it; `--raw` emits the untouched provider payload instead.
-Async verbs (`video`, `upscale`, `caption`, `dub`, `understand`) accept
+Async verbs (`video`, `upscale`, `caption`, `dub`, `analyze`) accept
 `--poll-interval-secs`, `--max-wait-secs`, and `--no-wait`.
 
 ## Pipelines

@@ -1,5 +1,5 @@
 // Package falpipe holds the fal.ai-backed pipelines (video upscaling, VEED
-// captioning, and Gemini video understanding) layered on the shared fal client.
+// captioning, and Gemini video analysis) layered on the shared fal client.
 package falpipe
 
 import (
