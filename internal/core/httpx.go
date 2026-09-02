@@ -8,8 +8,8 @@ import (
 	"net/http"
 )
 
-// Version is stamped into the User-Agent and reported by `creative --version`.
-const Version = "0.1.1"
+// Version is stamped by GoReleaser and reported by `creative --version`.
+var Version = "dev"
 
 // UserAgent identifies the CLI to upstream providers.
 func UserAgent() string { return "creative-cli/" + Version }
