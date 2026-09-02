@@ -1,6 +1,7 @@
 /creative
 /dist
 /target
+/worktrees/
 *.tmp
 .env
 .DS_Store

@@ -30,7 +30,7 @@ MENTAL MODEL
 
 VERB CATALOG (default provider · required credential)
   image      OpenAI gpt-image-2        OPENAI_API_KEY      text2img; add --image REF for img2img
-  video      Segmind Seedance          SEGMIND_API_KEY     --prompt; --image/--video/--audio refs; --duration-seconds --resolution --aspect-ratio
+  video      Segmind Seedance          SEGMIND_API_KEY     default; --provider fal selects Gemini Omni Flash 1.1 (FAL_KEY)
   speech     ElevenLabs                ELEVENLABS_API_KEY  --text --voice-id --model
   music      ElevenLabs                ELEVENLABS_API_KEY  --prompt (--duration-seconds)
   sfx        ElevenLabs                ELEVENLABS_API_KEY  --prompt (--duration-seconds)
@@ -71,6 +71,9 @@ DAG PIPELINE RECIPES (chain verbs; feed one --out into the next input)
     creative video   --prompt "slow dolly across the product" --image hero.png --out clip.mp4
     creative upscale clip.mp4 --target 4k --out clip_4k.mp4
     creative caption clip_4k.mp4 --out final.mp4
+
+  Low-cost Gemini Omni Flash draft with synchronized audio:
+    creative video --provider fal --prompt "handheld product demo" --resolution 360p --duration-seconds 3 --out draft.mp4
 
   Study a viral reference, then recreate it:
     creative analyze https://youtube.com/watch?v=... --out brief.json

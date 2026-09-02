@@ -5,6 +5,7 @@ package falpipe
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"time"
 
 	"github.com/radjathaher/creative-cli/internal/core"
@@ -45,6 +46,23 @@ func Upscale(o UpscaleOpts, pretty, raw bool) (*core.Envelope, json.RawMessage, 
 	if !o.NoWait && o.Out == "" {
 		return nil, nil, fmt.Errorf("--out is required unless --no-wait is set")
 	}
+	if o.Fps != 30 && o.Fps != 60 {
+		return nil, nil, fmt.Errorf("--fps must be 30 or 60")
+	}
+	if o.Target != "720p" && o.Target != "1080p" && o.Target != "2k" && o.Target != "4k" {
+		return nil, nil, fmt.Errorf("unknown target %q (want 720p|1080p|2k|4k)", o.Target)
+	}
+	metadata, err := core.ProbeVideo(o.Input)
+	if err != nil {
+		return nil, nil, err
+	}
+	factor := 0.0
+	if o.Model == "topaz" || o.Model == "flashvsr" {
+		factor, err = factorForTarget(o.Target, metadata.Width, metadata.Height)
+		if err != nil {
+			return nil, nil, err
+		}
+	}
 	client, err := fal.New()
 	if err != nil {
 		return nil, nil, err
@@ -54,7 +72,7 @@ func Upscale(o UpscaleOpts, pretty, raw bool) (*core.Envelope, json.RawMessage, 
 	if err != nil {
 		return nil, nil, err
 	}
-	body, err := upscalePayload(o, input.ResolvedURL)
+	body, err := upscalePayload(o, input.ResolvedURL, factor)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -70,7 +88,7 @@ func Upscale(o UpscaleOpts, pretty, raw bool) (*core.Envelope, json.RawMessage, 
 		RequestID: qref.RequestID,
 		Model:     o.Model,
 		Input:     &input,
-		Cost:      estimateCost(o.Model, o.Target, 0),
+		Cost:      estimateCost(o, metadata.DurationSeconds),
 	}
 	if o.NoWait {
 		env.Output = "queued"
@@ -97,7 +115,7 @@ func Upscale(o UpscaleOpts, pretty, raw bool) (*core.Envelope, json.RawMessage, 
 	return env, resraw, nil
 }
 
-func upscalePayload(o UpscaleOpts, videoURL string) (map[string]any, error) {
+func upscalePayload(o UpscaleOpts, videoURL string, factor float64) (map[string]any, error) {
 	switch o.Model {
 	case "bytedance":
 		if o.Target == "720p" {
@@ -114,7 +132,7 @@ func upscalePayload(o UpscaleOpts, videoURL string) (map[string]any, error) {
 	case "topaz":
 		return map[string]any{
 			"video_url":      videoURL,
-			"upscale_factor": factorForTarget(o.Target),
+			"upscale_factor": factor,
 			"model":          orDefault(o.TopazModel, "Proteus"),
 			"target_fps":     o.Fps,
 			"H264_output":    true,
@@ -122,7 +140,7 @@ func upscalePayload(o UpscaleOpts, videoURL string) (map[string]any, error) {
 	case "flashvsr":
 		return map[string]any{
 			"video_url":         videoURL,
-			"upscale_factor":    factorForTarget(o.Target),
+			"upscale_factor":    factor,
 			"output_format":     "X264 (.mp4)",
 			"output_quality":    "high",
 			"output_write_mode": "balanced",
@@ -167,28 +185,43 @@ func seedvrTarget(target string) string {
 	}
 }
 
-func factorForTarget(target string) float64 {
+func factorForTarget(target string, width, height int) (float64, error) {
+	shortEdge := min(width, height)
+	if shortEdge <= 0 {
+		return 0, fmt.Errorf("input video dimensions must be positive")
+	}
+	var targetEdge int
 	switch target {
 	case "720p":
-		return 1.5
+		targetEdge = 720
+	case "1080p":
+		targetEdge = 1080
 	case "2k":
-		return 3.0
+		targetEdge = 1440
 	case "4k":
-		return 4.0
+		targetEdge = 2160
 	default:
-		return 2.0
+		return 0, fmt.Errorf("unknown target %q (want 720p|1080p|2k|4k)", target)
 	}
+	factor := float64(targetEdge) / float64(shortEdge)
+	if factor < 1 {
+		return 0, fmt.Errorf("--target %s is smaller than the %dx%d input", target, width, height)
+	}
+	if factor > 4 {
+		return 0, fmt.Errorf("--target %s needs %.3fx upscale; fal supports at most 4x", target, factor)
+	}
+	return math.Round(factor*1000) / 1000, nil
 }
 
-// estimateCost mirrors upscale-cli's rate card; returns nil when unpriced.
-func estimateCost(model, target string, seconds float64) *float64 {
+// estimateCost mirrors the provider rate cards; returns nil when unpriced.
+func estimateCost(o UpscaleOpts, seconds float64) *float64 {
 	if seconds <= 0 {
 		return nil
 	}
 	var rate float64
-	switch model {
+	switch o.Model {
 	case "bytedance":
-		switch target {
+		switch o.Target {
 		case "1080p":
 			rate = 0.0072
 		case "2k":
@@ -199,7 +232,7 @@ func estimateCost(model, target string, seconds float64) *float64 {
 			return nil
 		}
 	case "topaz":
-		switch target {
+		switch o.Target {
 		case "720p":
 			rate = 0.0100
 		case "1080p":
@@ -207,10 +240,16 @@ func estimateCost(model, target string, seconds float64) *float64 {
 		default:
 			rate = 0.0800
 		}
+		if o.Fps == 60 {
+			rate *= 2
+		}
+		if o.TopazModel == "Gaia 2" {
+			rate /= 2
+		}
 	case "flashvsr":
-		rate = megapixels(target) * 30.0 * 0.0005
+		rate = megapixels(o.Target) * float64(o.Fps) * 0.0005
 	case "seedvr":
-		rate = megapixels(target) * 30.0 * 0.0010
+		rate = megapixels(o.Target) * float64(o.Fps) * 0.0010
 	default:
 		return nil
 	}

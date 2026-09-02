@@ -32,6 +32,9 @@ checksum:
   name_template: checksums.txt
 
 release:
+  # GitHub can persist an upload while returning a failed response. Delete and
+  # retry that exact artifact so this known API behavior does not leave CI red.
+  replace_existing_artifacts: true
   github:
     owner: radjathaher
     name: creative-cli
