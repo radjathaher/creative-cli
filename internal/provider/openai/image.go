@@ -4,16 +4,19 @@ package openai
 
 import (
 	"bytes"
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
 	"mime/multipart"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/radjathaher/creative-cli/internal/core"
 )
@@ -30,6 +33,8 @@ func baseURL() string {
 
 // ImageParams configures an image generation or edit request.
 type ImageParams struct {
+	Context      context.Context
+	Timeout      time.Duration
 	Prompt       string
 	Model        string
 	Size         string
@@ -42,6 +47,7 @@ type ImageParams struct {
 
 // ImageResult carries the decoded bytes of the first image plus provider metadata.
 type ImageResult struct {
+	Provider string
 	Bytes    []byte
 	Raw      json.RawMessage
 	Model    string
@@ -60,7 +66,7 @@ type imageResponse struct {
 // Generate produces images. With Refs it uses /v1/images/edits (img2img); other-
 // wise /v1/images/generations (text2img). The first image is returned decoded.
 func Generate(p ImageParams) (*ImageResult, error) {
-	key, err := core.ReadSecret("OPENAI_API_KEY")
+	backend, err := resolveImageBackend()
 	if err != nil {
 		return nil, err
 	}
@@ -70,14 +76,28 @@ func Generate(p ImageParams) (*ImageResult, error) {
 	if p.N <= 0 {
 		p.N = 1
 	}
+	if p.Context == nil {
+		p.Context = context.Background()
+	}
+	if p.Timeout <= 0 {
+		p.Timeout = 10 * time.Minute
+	}
+	ctx, cancel := context.WithTimeout(p.Context, p.Timeout)
+	defer cancel()
+	p.Context = ctx
+	return p.generateWithBackend(backend, true)
+}
 
+func (p ImageParams) generateWithBackend(backend imageBackend, allowFallback bool) (*ImageResult, error) {
 	var resp *http.Response
-	endpoint := "/v1/images/generations"
+	var err error
+	base, _ := url.Parse(backend.base)
+	endpoint := strings.TrimRight(base.Path, "/") + "/images/generations"
 	if len(p.Refs) > 0 {
-		endpoint = "/v1/images/edits"
-		resp, err = p.postEdits(key)
+		endpoint = strings.TrimRight(base.Path, "/") + "/images/edits"
+		resp, err = p.postEdits(backend)
 	} else {
-		resp, err = p.postGenerations(key)
+		resp, err = p.postGenerations(backend)
 	}
 	if err != nil {
 		return nil, err
@@ -85,6 +105,14 @@ func Generate(p ImageParams) (*ImageResult, error) {
 
 	_, raw, err := core.DecodeJSON(resp)
 	if err != nil {
+		if allowFallback && backend.name == "codex-lb" && allowsImageFallback(resp.StatusCode, raw) {
+			direct, configErr := directImageBackend()
+			if configErr != nil {
+				return nil, fmt.Errorf("codex-lb rejected generation; OpenAI fallback unavailable: %w", configErr)
+			}
+			core.Progress("codex-lb pool exhausted; using OpenAI fallback")
+			return p.generateWithBackend(direct, false)
+		}
 		return nil, err
 	}
 	var parsed imageResponse
@@ -95,7 +123,7 @@ func Generate(p ImageParams) (*ImageResult, error) {
 		return nil, fmt.Errorf("no image returned")
 	}
 	d := parsed.Data[0]
-	res := &ImageResult{Raw: raw, Model: p.Model, Usage: parsed.Usage, Endpoint: endpoint}
+	res := &ImageResult{Provider: backend.name, Raw: raw, Model: p.Model, Usage: parsed.Usage, Endpoint: endpoint}
 	switch {
 	case d.B64JSON != "":
 		b, derr := base64.StdEncoding.DecodeString(d.B64JSON)
@@ -104,7 +132,7 @@ func Generate(p ImageParams) (*ImageResult, error) {
 		}
 		res.Bytes = b
 	case d.URL != "":
-		b, derr := fetch(d.URL)
+		b, derr := fetchContext(p.Context, d.URL)
 		if derr != nil {
 			return nil, derr
 		}
@@ -115,21 +143,24 @@ func Generate(p ImageParams) (*ImageResult, error) {
 	return res, nil
 }
 
-func (p ImageParams) postGenerations(key string) (*http.Response, error) {
+func (p ImageParams) postGenerations(backend imageBackend) (*http.Response, error) {
 	body := map[string]any{"model": p.Model, "prompt": p.Prompt, "n": p.N}
 	putIf(body, "size", p.Size)
 	putIf(body, "quality", p.Quality)
 	putIf(body, "background", p.Background)
 	putIf(body, "output_format", p.OutputFormat)
 	buf, _ := json.Marshal(body)
-	req, _ := http.NewRequest(http.MethodPost, baseURL()+"/images/generations", bytes.NewReader(buf))
-	req.Header.Set("Authorization", "Bearer "+key)
+	req, err := http.NewRequestWithContext(p.Context, http.MethodPost, backend.base+"/images/generations", bytes.NewReader(buf))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Authorization", "Bearer "+backend.key)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("User-Agent", core.UserAgent())
-	return core.SharedClient.Do(req)
+	return sendImageRequest(req)
 }
 
-func (p ImageParams) postEdits(key string) (*http.Response, error) {
+func (p ImageParams) postEdits(backend imageBackend) (*http.Response, error) {
 	var buf bytes.Buffer
 	w := multipart.NewWriter(&buf)
 	_ = w.WriteField("model", p.Model)
@@ -137,9 +168,10 @@ func (p ImageParams) postEdits(key string) (*http.Response, error) {
 	_ = w.WriteField("n", strconv.Itoa(p.N))
 	writeFieldIf(w, "size", p.Size)
 	writeFieldIf(w, "quality", p.Quality)
+	writeFieldIf(w, "background", p.Background)
 	writeFieldIf(w, "output_format", p.OutputFormat)
 	for _, ref := range p.Refs {
-		data, name, err := readRef(ref)
+		data, name, err := readRefContext(p.Context, ref)
 		if err != nil {
 			return nil, err
 		}
@@ -154,17 +186,24 @@ func (p ImageParams) postEdits(key string) (*http.Response, error) {
 	if err := w.Close(); err != nil {
 		return nil, err
 	}
-	req, _ := http.NewRequest(http.MethodPost, baseURL()+"/images/edits", &buf)
-	req.Header.Set("Authorization", "Bearer "+key)
+	req, err := http.NewRequestWithContext(p.Context, http.MethodPost, backend.base+"/images/edits", &buf)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Authorization", "Bearer "+backend.key)
 	req.Header.Set("Content-Type", w.FormDataContentType())
 	req.Header.Set("User-Agent", core.UserAgent())
-	return core.SharedClient.Do(req)
+	return sendImageRequest(req)
 }
 
 // readRef loads an image reference from a local path or remote URL.
 func readRef(ref string) (data []byte, name string, err error) {
+	return readRefContext(context.Background(), ref)
+}
+
+func readRefContext(ctx context.Context, ref string) (data []byte, name string, err error) {
 	if core.IsRemoteRef(ref) {
-		b, ferr := fetch(ref)
+		b, ferr := fetchContext(ctx, ref)
 		if ferr != nil {
 			return nil, "", ferr
 		}
@@ -178,7 +217,14 @@ func readRef(ref string) (data []byte, name string, err error) {
 }
 
 func fetch(url string) ([]byte, error) {
-	req, _ := http.NewRequest(http.MethodGet, url, nil)
+	return fetchContext(context.Background(), url)
+}
+
+func fetchContext(ctx context.Context, url string) ([]byte, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	if err != nil {
+		return nil, err
+	}
 	req.Header.Set("User-Agent", core.UserAgent())
 	resp, err := core.SharedClient.Do(req)
 	if err != nil {

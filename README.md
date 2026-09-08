@@ -23,7 +23,7 @@ go build -o creative .
 
 | Verb | Default provider | Credential | What it does |
 |------|------------------|------------|--------------|
-| `creative image` | OpenAI gpt-image-2 | `OPENAI_API_KEY` | text→image; `--image REF` for img2img |
+| `creative image` | codex-lb when configured, otherwise OpenAI | `CODEX_LB_API_KEY` / `OPENAI_API_KEY` | gpt-image-2 text→image; `--image REF` for img2img |
 | `creative video` | Segmind Seedance; fal Gemini Omni Flash | `SEGMIND_API_KEY` / `FAL_KEY` | text/reference→video with provider-generated audio |
 | `creative speech` | ElevenLabs | `ELEVENLABS_API_KEY` | text→voiceover |
 | `creative music` | ElevenLabs | `ELEVENLABS_API_KEY` | text→music |
@@ -37,6 +37,34 @@ go build -o creative .
 
 Credentials resolve from the environment first, then `/run/secrets/<NAME>` — the
 same convention every sibling CLI uses.
+
+## Image backend selection
+
+Set both `CODEX_LB_BASE_URL` and `CODEX_LB_API_KEY` to prefer your load balancer.
+The base URL includes the API prefix, for example `https://codex-lb.cakrawala.ai/v1`.
+Do not use the text Responses prefix `/backend-api/codex` for Images API calls.
+If only one Codex setting is present, the command reports a configuration error.
+
+Without Codex settings, images use `OPENAI_API_KEY` and `OPENAI_BASE_URL`
+(default `https://api.openai.com/v1`). The existing `OPENAI_API_URL` variable
+remains a lower-priority alias for the image base URL. Other verbs are unchanged.
+
+```bash
+export CODEX_LB_BASE_URL=https://codex-lb.cakrawala.ai/v1
+# Supply CODEX_LB_API_KEY through your secret manager.
+creative image --prompt "a red cube on white" --out cube.png
+```
+
+Runtime fallback is disabled unless `CODEX_LB_EXHAUSTION_CODES` contains an
+explicit comma-separated allowlist of your server's pool-exhaustion error codes.
+Only a matching structured error can select direct OpenAI, which also requires
+`OPENAI_API_KEY`. Timeouts, connection loss, and other errors never trigger a
+second generation: the first server might still be working. Do not allowlist
+generic rate-limit or server-error codes.
+
+Image requests have a ten-minute total timeout, including downloads and fallback.
+Use `--timeout 25m` when your image backend needs more time. Backend selection is
+automatic; the image command does not need a `--provider` flag.
 
 ## Output contract
 

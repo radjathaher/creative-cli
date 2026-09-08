@@ -29,7 +29,7 @@ MENTAL MODEL
     creative voice    clone/design
 
 VERB CATALOG (default provider · required credential)
-  image      OpenAI gpt-image-2        OPENAI_API_KEY      text2img; add --image REF for img2img
+  image      codex-lb / OpenAI         CODEX_LB_API_KEY / OPENAI_API_KEY; add --image REF for img2img
   video      Segmind Seedance          SEGMIND_API_KEY     default; --provider fal selects Gemini Omni Flash 1.1 (FAL_KEY)
   speech     ElevenLabs                ELEVENLABS_API_KEY  --text --voice-id --model
   music      ElevenLabs                ELEVENLABS_API_KEY  --prompt (--duration-seconds)
@@ -42,7 +42,14 @@ VERB CATALOG (default provider · required credential)
   analyze    fal->OpenRouter->Gemini   FAL_KEY             INPUT (video/YouTube url) -> recreation brief
 
 CREDENTIALS  (resolved: env var first, then /run/secrets/<NAME>)
-  OPENAI_API_KEY  SEGMIND_API_KEY  ELEVENLABS_API_KEY  FAL_KEY  ZAPCAP_API_KEY
+  OPENAI_API_KEY  CODEX_LB_API_KEY  SEGMIND_API_KEY  ELEVENLABS_API_KEY  FAL_KEY  ZAPCAP_API_KEY
+
+IMAGE BACKENDS
+  Set CODEX_LB_BASE_URL (including /v1) + CODEX_LB_API_KEY to prefer codex-lb.
+  Partial Codex configuration is an error. With neither, use OPENAI_API_KEY and
+  OPENAI_BASE_URL (default https://api.openai.com/v1; alias OPENAI_API_URL).
+  CODEX_LB_EXHAUSTION_CODES explicitly allowlists structured pool errors that
+  permit OpenAI fallback. Never retry another backend on timeout/network loss.
   Missing key error format: "<NAME> missing; export it or provide /run/secrets/<NAME>".
 
 OUTPUT CONTRACT

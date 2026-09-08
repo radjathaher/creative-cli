@@ -25,8 +25,8 @@ func init() {
 		c.Flags().String("background", "", "transparent | opaque | auto")
 		c.Flags().String("output-format", "png", "png | jpeg | webp")
 		c.Flags().Int("n", 1, "number of images (the first is written to --out)")
+		c.Flags().Duration("timeout", 10*time.Minute, "total image request timeout, including fallback and downloads")
 		addOutFlag(c)
-		addProviderFlag(c, "openai")
 		root.AddCommand(c)
 	})
 }
@@ -42,6 +42,10 @@ func runImage(cmd *cobra.Command, _ []string) error {
 		return fmt.Errorf("--out is required")
 	}
 	refs := flagStrs(cmd, "image")
+	timeout, err := cmd.Flags().GetDuration("timeout")
+	if err != nil || timeout <= 0 {
+		return fmt.Errorf("--timeout must be a positive duration")
+	}
 
 	started := time.Now()
 	if len(refs) > 0 {
@@ -51,6 +55,8 @@ func runImage(cmd *cobra.Command, _ []string) error {
 	}
 
 	res, err := openai.Generate(openai.ImageParams{
+		Context:      cmd.Context(),
+		Timeout:      timeout,
 		Prompt:       prompt,
 		Model:        flagStr(cmd, "model"),
 		Size:         flagStr(cmd, "size"),
@@ -70,7 +76,7 @@ func runImage(cmd *cobra.Command, _ []string) error {
 	core.Progress("done in %.3fs", elapsed)
 
 	env := &core.Envelope{
-		Provider:       "openai",
+		Provider:       res.Provider,
 		Endpoint:       res.Endpoint,
 		Model:          res.Model,
 		Input:          &core.InputInfo{Kind: inputKind(refs), Source: prompt},
