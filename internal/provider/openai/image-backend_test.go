@@ -2,6 +2,7 @@ package openai
 
 import (
 	"context"
+	"encoding/json"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -64,8 +65,22 @@ func TestImageGenerationAndEdits(t *testing.T) {
 					if r.MultipartForm != nil {
 						defer r.MultipartForm.RemoveAll()
 					}
+					if r.FormValue("model") != "gpt-image-2.5-sunburst" {
+						t.Errorf("default edit model = %q", r.FormValue("model"))
+					}
 					if r.FormValue("background") != "transparent" || len(r.MultipartForm.File["image[]"]) != 1 {
 						t.Error("missing multipart fields")
+					}
+				} else {
+					var body struct {
+						Model string `json:"model"`
+					}
+					if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+						t.Error(err)
+						return
+					}
+					if body.Model != "gpt-image-2.5-sunburst" {
+						t.Errorf("default generation model = %q", body.Model)
 					}
 				}
 				if r.URL.Path != endpoint || r.Header.Get("Authorization") != "Bearer lb-key" {

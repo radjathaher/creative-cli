@@ -23,7 +23,7 @@ go build -o creative .
 
 | Verb | Default provider | Credential | What it does |
 |------|------------------|------------|--------------|
-| `creative image` | codex-lb when configured, otherwise OpenAI | `CODEX_LB_API_KEY` / `OPENAI_API_KEY` | gpt-image-2 text→image; `--image REF` for img2img |
+| `creative image` | codex-lb when configured, otherwise OpenAI | `CODEX_LB_API_KEY` / `OPENAI_API_KEY` | GPT Image 2.5 Sunburst text→image; `--image REF` for img2img |
 | `creative video` | Segmind Seedance; fal Gemini Omni Flash | `SEGMIND_API_KEY` / `FAL_KEY` | text/reference→video with provider-generated audio |
 | `creative speech` | ElevenLabs | `ELEVENLABS_API_KEY` | text→voiceover |
 | `creative music` | ElevenLabs | `ELEVENLABS_API_KEY` | text→music |
@@ -71,7 +71,7 @@ automatic; the image command does not need a `--provider` flag.
 `stdout` is a single JSON envelope:
 
 ```json
-{"provider":"openai","endpoint":"/v1/images/generations","model":"gpt-image-2",
+{"provider":"openai","endpoint":"/v1/images/generations","model":"gpt-image-2.5-sunburst",
  "input":{"kind":"prompt","source":"..."},"output":"image",
  "elapsed_seconds":4.12,"out":"hero.png"}
 ```

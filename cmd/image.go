@@ -13,15 +13,15 @@ func init() {
 	register(func(root *cobra.Command) {
 		c := &cobra.Command{
 			Use:   "image",
-			Short: "Generate or edit an image via OpenAI gpt-image-2 (add --image REF for img2img).",
+			Short: "Generate or edit an image via GPT Image 2.5 (add --image REF for img2img).",
 			Args:  cobra.NoArgs,
 			RunE:  runImage,
 		}
 		c.Flags().String("prompt", "", "text prompt (required)")
 		c.Flags().StringArray("image", nil, "reference image for img2img (path or url), repeatable")
-		c.Flags().String("model", "gpt-image-2", "OpenAI image model id")
+		c.Flags().String("model", "gpt-image-2.5-sunburst", "OpenAI image model id")
 		c.Flags().String("size", "auto", "1024x1024 | 1536x1024 | 1024x1536 | auto")
-		c.Flags().String("quality", "auto", "low | medium | high | auto")
+		c.Flags().String("quality", "auto", "low | medium | high | xhigh | max | auto")
 		c.Flags().String("background", "", "transparent | opaque | auto")
 		c.Flags().String("output-format", "png", "png | jpeg | webp")
 		c.Flags().Int("n", 1, "number of images (the first is written to --out)")

@@ -1,5 +1,5 @@
 // Package openai wraps the OpenAI HTTP API surface used by creative: image
-// generation/editing (gpt-image-2) and audio transcription (whisper).
+// generation/editing (GPT Image 2.5) and audio transcription (whisper).
 package openai
 
 import (
@@ -71,7 +71,7 @@ func Generate(p ImageParams) (*ImageResult, error) {
 		return nil, err
 	}
 	if p.Model == "" {
-		p.Model = "gpt-image-2"
+		p.Model = "gpt-image-2.5-sunburst"
 	}
 	if p.N <= 0 {
 		p.N = 1
