@@ -30,10 +30,12 @@ type UpscaleOpts struct {
 	PollIntervalSecs int
 	MaxWaitSecs      int
 	// ByteDance tuning
-	BytedancePreset   string
-	BytedanceTier     string
-	BytedanceFidelity string
-	TopazModel        string
+	TopazFactor        float64 // explicit upscale factor; 0 derives it from --target
+	TopazRecoverDetail float64 // 0-1; negative leaves the model default
+	BytedancePreset    string
+	BytedanceTier      string
+	BytedanceFidelity  string
+	TopazModel         string
 }
 
 // Upscale resolves the input, submits the fal job, and (unless NoWait) polls,
@@ -46,7 +48,11 @@ func Upscale(o UpscaleOpts, pretty, raw bool) (*core.Envelope, json.RawMessage, 
 	if !o.NoWait && o.Out == "" {
 		return nil, nil, fmt.Errorf("--out is required unless --no-wait is set")
 	}
-	if o.Fps != 30 && o.Fps != 60 {
+	if o.Model == "topaz" {
+		if o.Fps < 16 || o.Fps > 60 {
+			return nil, nil, fmt.Errorf("--fps must be 16-60 for topaz")
+		}
+	} else if o.Fps != 30 && o.Fps != 60 {
 		return nil, nil, fmt.Errorf("--fps must be 30 or 60")
 	}
 	if o.Target != "720p" && o.Target != "1080p" && o.Target != "2k" && o.Target != "4k" {
@@ -130,13 +136,20 @@ func upscalePayload(o UpscaleOpts, videoURL string, factor float64) (map[string]
 			"enhancement_tier":   orDefault(o.BytedanceTier, "standard"),
 		}, nil
 	case "topaz":
-		return map[string]any{
+		if o.TopazFactor > 0 {
+			factor = o.TopazFactor
+		}
+		body := map[string]any{
 			"video_url":      videoURL,
 			"upscale_factor": factor,
 			"model":          orDefault(o.TopazModel, "Proteus"),
 			"target_fps":     o.Fps,
 			"H264_output":    true,
-		}, nil
+		}
+		if o.TopazRecoverDetail >= 0 {
+			body["recover_detail"] = o.TopazRecoverDetail
+		}
+		return body, nil
 	case "flashvsr":
 		return map[string]any{
 			"video_url":         videoURL,

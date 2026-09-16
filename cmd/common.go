@@ -45,7 +45,11 @@ func addRefFlags(cmd *cobra.Command) {
 
 func flagStr(cmd *cobra.Command, name string) string { v, _ := cmd.Flags().GetString(name); return v }
 func flagInt(cmd *cobra.Command, name string) int    { v, _ := cmd.Flags().GetInt(name); return v }
-func flagBool(cmd *cobra.Command, name string) bool  { v, _ := cmd.Flags().GetBool(name); return v }
+func flagFloat(cmd *cobra.Command, name string) float64 {
+	v, _ := cmd.Flags().GetFloat64(name)
+	return v
+}
+func flagBool(cmd *cobra.Command, name string) bool { v, _ := cmd.Flags().GetBool(name); return v }
 func flagStrs(cmd *cobra.Command, name string) []string {
 	v, _ := cmd.Flags().GetStringArray(name)
 	return v
