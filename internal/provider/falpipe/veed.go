@@ -18,6 +18,12 @@ type VeedOpts struct {
 	Input            string
 	Preset           string // caption style preset, e.g. simple
 	Language         string // optional source language override
+	Position         string // top | center | bottom
+	Shadow           string // none | min | mid | max
+	Font             string // Google Font family for both tiers
+	FontWeight       int    // 100-900; 0 leaves the preset default
+	FontColor        string // hex for baseline words
+	HighlightColor   string // hex for highlighted words
 	Out              string
 	NoWait           bool
 	PollIntervalSecs int
@@ -45,6 +51,9 @@ func Veed(o VeedOpts, pretty, raw bool) (*core.Envelope, json.RawMessage, error)
 	}
 	if o.Language != "" {
 		body["language"] = o.Language
+	}
+	if c := veedCustomization(o); len(c) > 0 {
+		body["customization"] = c
 	}
 	core.Progress("captioning with fal veed (preset %s)", orDefault(o.Preset, "simple"))
 	qref, qraw, err := client.Submit(veedEndpoint, body)
@@ -81,4 +90,41 @@ func Veed(o VeedOpts, pretty, raw bool) (*core.Envelope, json.RawMessage, error)
 	env.ElapsedSeconds = roundSecs(started)
 	core.Progress("done in %.3fs", env.ElapsedSeconds)
 	return env, resraw, nil
+}
+
+// veedCustomization builds the optional customization block; VEED only accepts
+// Google Fonts, and each text tier can carry its own font, weight and colour.
+func veedCustomization(o VeedOpts) map[string]any {
+	c := map[string]any{}
+	if o.Position != "" {
+		c["position"] = o.Position
+	}
+	if o.Shadow != "" {
+		c["shadow"] = o.Shadow
+	}
+	tier := func(color string) map[string]any {
+		t := map[string]any{}
+		if o.Font != "" {
+			t["font"] = o.Font
+		}
+		if o.FontWeight > 0 {
+			t["weight"] = o.FontWeight
+		}
+		if color != "" {
+			t["color"] = color
+		}
+		return t
+	}
+	base, hi := tier(o.FontColor), tier(o.HighlightColor)
+	if len(base) > 0 || len(hi) > 0 {
+		tc := map[string]any{}
+		if len(base) > 0 {
+			tc["baseline"] = base
+		}
+		if len(hi) > 0 {
+			tc["highlighted"] = hi
+		}
+		c["text_customizations"] = tc
+	}
+	return c
 }

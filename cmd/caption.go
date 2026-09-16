@@ -19,6 +19,12 @@ func init() {
 		}
 		addProviderFlag(c, "veed")
 		c.Flags().String("preset", "simple", "caption style preset (veed)")
+		c.Flags().String("position", "", "veed caption position: top | center | bottom")
+		c.Flags().String("shadow", "", "veed text shadow: none | min | mid | max")
+		c.Flags().String("font", "", "veed Google Font family, e.g. Inter")
+		c.Flags().Int("font-weight", 0, "veed font weight 100-900")
+		c.Flags().String("font-color", "", "veed baseline word colour, hex")
+		c.Flags().String("highlight-color", "", "veed highlighted word colour, hex")
 		c.Flags().String("language", "", "source language override (veed: optional; zapcap: defaults en)")
 		c.Flags().String("template-id", "", "caption template id (zapcap, required)")
 		addOutFlag(c)
@@ -48,6 +54,12 @@ func runCaption(cmd *cobra.Command, args []string) error {
 		env, raw, err = falpipe.Veed(falpipe.VeedOpts{
 			Input:            args[0],
 			Preset:           flagStr(cmd, "preset"),
+			Position:         flagStr(cmd, "position"),
+			Shadow:           flagStr(cmd, "shadow"),
+			Font:             flagStr(cmd, "font"),
+			FontWeight:       flagInt(cmd, "font-weight"),
+			FontColor:        flagStr(cmd, "font-color"),
+			HighlightColor:   flagStr(cmd, "highlight-color"),
 			Language:         flagStr(cmd, "language"),
 			Out:              flagStr(cmd, "out"),
 			NoWait:           flagBool(cmd, "no-wait"),
