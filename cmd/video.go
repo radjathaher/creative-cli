@@ -18,7 +18,7 @@ func init() {
 			RunE:  runVideo,
 		}
 		c.Flags().String("prompt", "", "text prompt (required)")
-		c.Flags().String("model", "auto", "auto | mini | fast | standard | omni-1.1-flash")
+		c.Flags().String("model", "auto", "auto | mini | fast | standard | 2.5 (Seedance 2.5, 4-30s) | omni-1.1-flash")
 		addRefFlags(c)
 		c.Flags().String("first-frame", "", "starting frame image (path or url); cannot combine with --image")
 		c.Flags().String("last-frame", "", "ending frame image (path or url); requires --first-frame")

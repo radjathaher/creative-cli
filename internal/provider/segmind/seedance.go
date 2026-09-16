@@ -27,6 +27,7 @@ var modelSlugs = map[string]string{
 	"mini":     "seedance-2.0-mini",
 	"fast":     "seedance-2.0-fast",
 	"standard": "seedance-2.0",
+	"2.5":      "seedance-2.5",
 }
 
 // GenerateOpts configures a Seedance video generation job.
@@ -54,7 +55,7 @@ type GenerateOpts struct {
 func Generate(o GenerateOpts, pretty, raw bool) (*core.Envelope, json.RawMessage, error) {
 	slug, ok := modelSlugs[o.Model]
 	if !ok {
-		return nil, nil, fmt.Errorf("unknown model %q (want mini|fast|standard)", o.Model)
+		return nil, nil, fmt.Errorf("unknown model %q (want mini|fast|standard|2.5)", o.Model)
 	}
 	if !o.NoWait && o.Out == "" {
 		return nil, nil, fmt.Errorf("--out is required unless --no-wait is set")
