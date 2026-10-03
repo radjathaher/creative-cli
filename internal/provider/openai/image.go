@@ -9,8 +9,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"mime"
 	"mime/multipart"
 	"net/http"
+	"net/textproto"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -175,7 +177,10 @@ func (p ImageParams) postEdits(backend imageBackend) (*http.Response, error) {
 		if err != nil {
 			return nil, err
 		}
-		fw, err := w.CreateFormFile("image[]", name)
+		part := make(textproto.MIMEHeader)
+		part.Set("Content-Disposition", fmt.Sprintf(`form-data; name="image[]"; filename="%s"`, name))
+		part.Set("Content-Type", core.MIMEForPath(name))
+		fw, err := w.CreatePart(part)
 		if err != nil {
 			return nil, err
 		}
@@ -203,11 +208,18 @@ func readRef(ref string) (data []byte, name string, err error) {
 
 func readRefContext(ctx context.Context, ref string) (data []byte, name string, err error) {
 	if core.IsRemoteRef(ref) {
-		b, ferr := fetchContext(ctx, ref)
+		b, contentType, ferr := fetchContextWithType(ctx, ref)
 		if ferr != nil {
 			return nil, "", ferr
 		}
-		return b, "ref.png", nil
+		ext := filepath.Ext(strings.TrimSpace(strings.Split(ref, "?")[0]))
+		if ext == "" {
+			ext = extensionForMIME(contentType)
+		}
+		if ext == "" {
+			ext = ".png"
+		}
+		return b, "ref" + ext, nil
 	}
 	b, ferr := os.ReadFile(ref)
 	if ferr != nil {
@@ -221,20 +233,39 @@ func fetch(url string) ([]byte, error) {
 }
 
 func fetchContext(ctx context.Context, url string) ([]byte, error) {
+	b, _, err := fetchContextWithType(ctx, url)
+	return b, err
+}
+
+func fetchContextWithType(ctx context.Context, url string) ([]byte, string, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 	req.Header.Set("User-Agent", core.UserAgent())
 	resp, err := core.SharedClient.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, fmt.Errorf("fetch %s: http %d", url, resp.StatusCode)
+		return nil, "", fmt.Errorf("fetch %s: http %d", url, resp.StatusCode)
 	}
-	return io.ReadAll(resp.Body)
+	b, err := io.ReadAll(resp.Body)
+	return b, resp.Header.Get("Content-Type"), err
+}
+
+func extensionForMIME(contentType string) string {
+	t, _, _ := mime.ParseMediaType(contentType)
+	switch t {
+	case "image/jpeg":
+		return ".jpg"
+	case "image/webp":
+		return ".webp"
+	case "image/png":
+		return ".png"
+	}
+	return ""
 }
 
 func putIf(m map[string]any, key, val string) {
