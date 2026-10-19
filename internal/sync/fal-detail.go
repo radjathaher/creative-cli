@@ -148,15 +148,17 @@ func schemaDefault(schema json.RawMessage, field string) string {
 }
 
 var (
-	reRes        = regexp.MustCompile(`(?i)\b(360p|480p|540p|580p|720p|768p|1080p|1440p|2k|4k)\b`)
-	reUSD        = regexp.MustCompile(`\$([0-9]*\.?[0-9]+)`)
-	rePerBlock   = regexp.MustCompile(`(?i)(?:per (\d+) seconds?|(\d+) seconds? costs)`)
-	rePerSecond  = regexp.MustCompile(`(?i)per second|/s\b|per \d+ seconds|\d+ seconds? costs`)
-	reTokTier    = regexp.MustCompile(`(?i)\$([\d.]+)\**\s*per 1000 tokens for ((?:\d+p(?:,? and |, )?)+)`)
-	rePerRequest = regexp.MustCompile(`(?i)^(?:your request will cost\s+)?\$([\d.]+)\**\s*per (?:request|generation|call|run)\b`)
-	reImgTokens  = regexp.MustCompile(`(?i)image tokens \(per 1m\):\s*\$([\d.]+) input.*?\$([\d.]+) output`)
-	reFPSDouble  = regexp.MustCompile(`(?i)(?:50|60) ?fps[^.]*doubl|doubl[^.]*(?:50|60) ?fps`)
-	reSentence   = regexp.MustCompile(`\.\s+|\n`)
+	reRes         = regexp.MustCompile(`(?i)\b(360p|480p|540p|580p|720p|768p|1080p|1440p|2k|4k)\b`)
+	reUSD         = regexp.MustCompile(`\$([0-9]*\.?[0-9]+)`)
+	rePerBlock    = regexp.MustCompile(`(?i)(?:per (\d+) seconds?|(\d+) seconds? costs)`)
+	rePerSecond   = regexp.MustCompile(`(?i)per second|/s\b|per \d+ seconds|\d+ seconds? costs`)
+	reTokTier     = regexp.MustCompile(`(?i)\$([\d.]+)\**\s*per 1000 tokens for ((?:\d+p(?:,? and |, )?)+)`)
+	rePerRequest  = regexp.MustCompile(`(?i)^(?:your request will cost\s+)?\$([\d.]+)\**\s*per (?:request|generation|call|run)\b`)
+	reWillCost    = regexp.MustCompile(`(?i)(?:will cost|costs?)\s+\$[\d.]+`)
+	reOptionPrice = regexp.MustCompile(`\$([\d.]+)\s*\(([^)]+)\)`)
+	reImgTokens   = regexp.MustCompile(`(?i)image tokens \(per 1m\):\s*\$([\d.]+) input.*?\$([\d.]+) output`)
+	reFPSDouble   = regexp.MustCompile(`(?i)(?:50|60) ?fps[^.]*doubl|doubl[^.]*(?:50|60) ?fps`)
+	reSentence    = regexp.MustCompile(`\.\s+|\n`)
 )
 
 // applyPagePrice reads the pricing prose on a fal model page (llms.txt). The
@@ -199,6 +201,8 @@ func applyPagePrice(p *registry.Price, page, pageURL, defaultRes, family, op str
 	} else if m := rePerRequest.FindStringSubmatch(text); m != nil && unconvertible {
 		v, _ := strconv.ParseFloat(m[1], 64)
 		p.Unit, p.ValueUSD, p.Source, p.SourceURL = registry.UnitRequest, registry.F(v), registry.SourcePage, pageURL
+	} else if opts := reOptionPrice.FindAllStringSubmatch(text, -1); len(opts) > 0 && unconvertible && reWillCost.MatchString(text) {
+		applyOptionPrices(p, opts, pageURL)
 	} else if m := reImgTokens.FindStringSubmatch(text); m != nil && unconvertible {
 		v, _ := strconv.ParseFloat(m[2], 64)
 		p.Unit, p.ValueUSD, p.Source, p.SourceURL = registry.UnitMTokens, registry.F(v), registry.SourcePage, pageURL
@@ -317,4 +321,40 @@ func joinNote(a, b string) string {
 		return b
 	}
 	return a + "; " + b
+}
+
+// applyOptionPrices handles pages that price a request by option, such as
+// Tripo: "$0.20 (without textures), $0.30 (with standard textures), or $0.40
+// (with HD textures)". The default is the option labelled standard or default,
+// else the first one; each option also becomes a quality tier, and add-ons the
+// page mentions stay in the note.
+func applyOptionPrices(p *registry.Price, opts [][]string, pageURL string) {
+	p.Unit, p.Source, p.SourceURL, p.Tiers = registry.UnitRequest, registry.SourcePage, pageURL, nil
+	def := -1.0
+	for _, o := range opts {
+		v, err := strconv.ParseFloat(o[1], 64)
+		if err != nil {
+			continue
+		}
+		label := strings.ToLower(o[2])
+		p.Tiers = append(p.Tiers, registry.PriceTier{Match: map[string]string{"quality": optionSlug(label)}, ValueUSD: v})
+		if def < 0 || strings.Contains(label, "standard") || strings.Contains(label, "default") {
+			def = v
+		}
+	}
+	if def >= 0 {
+		p.ValueUSD = registry.F(def)
+	}
+}
+
+func optionSlug(label string) string {
+	switch {
+	case strings.Contains(label, "without"):
+		return "none"
+	case strings.Contains(label, "hd"):
+		return "hd"
+	case strings.Contains(label, "standard"):
+		return "standard"
+	}
+	return strings.Join(strings.Fields(label), "-")
 }

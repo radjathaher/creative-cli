@@ -8,6 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 	"sort"
 	"strconv"
 	"strings"
@@ -143,7 +144,7 @@ func Build(ctx context.Context, r registry.Route, req job.Request, up Uploader, 
 			return nil, err
 		}
 	}
-	return body, applyParams(r, props, body, req.Params)
+	return body, applyParams(ctx, r, props, body, req.Params, up, dryRun)
 }
 
 // InputFlag picks the shared media flag that carries req.Input (the asset an
@@ -166,7 +167,7 @@ func InputFlag(pm map[string]string, input string) string {
 	return "video"
 }
 
-func applyParams(r registry.Route, props map[string]Prop, body map[string]any, params map[string]any) error {
+func applyParams(ctx context.Context, r registry.Route, props map[string]Prop, body map[string]any, params map[string]any, up Uploader, dryRun bool) error {
 	keys := make([]string, 0, len(params))
 	for k := range params {
 		keys = append(keys, k)
@@ -177,7 +178,11 @@ func applyParams(r registry.Route, props map[string]Prop, body map[string]any, p
 		if !ok {
 			return fmt.Errorf("--param %s: route %s has no such field (valid: %s)", k, r.ID, strings.Join(fieldNames(props), ", "))
 		}
-		v, err := coerce(params[k], p.TypeOf())
+		raw, err := uploadParam(ctx, k, params[k], up, dryRun)
+		if err != nil {
+			return fmt.Errorf("--param %s: %w", k, err)
+		}
+		v, err := coerce(raw, p.TypeOf())
 		if err != nil {
 			return fmt.Errorf("--param %s: %w", k, err)
 		}
@@ -277,4 +282,21 @@ func IsSafety(msg string) bool {
 // MIMEForURL guesses an output's content type from its URL path.
 func MIMEForURL(u string) string {
 	return core.MIMEForPath(strings.SplitN(u, "?", 2)[0])
+}
+
+// uploadParam uploads a local file given through --param to a URL-typed field
+// (any name ending in _url or _urls), so view slots such as back_image_url
+// receive a fetchable URL rather than a path on this machine.
+func uploadParam(ctx context.Context, field string, v any, up Uploader, dryRun bool) (any, error) {
+	path, ok := v.(string)
+	if !ok || !(strings.HasSuffix(field, "_url") || strings.HasSuffix(field, "_urls")) || core.IsRemoteRef(path) {
+		return v, nil
+	}
+	if fi, err := os.Stat(path); err != nil || fi.IsDir() {
+		return v, nil
+	}
+	if dryRun || up == nil {
+		return DryRunPrefix + path, nil
+	}
+	return up(ctx, path)
 }

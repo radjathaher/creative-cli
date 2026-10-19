@@ -52,7 +52,7 @@ var paramCandidates = []struct {
 }{
 	{"prompt", []string{"prompt", "text", "input_text"}},
 	{"negative_prompt", []string{"negative_prompt"}},
-	{"image", []string{"image_urls", "reference_image_urls", "input_image_urls", "images", "input_images", "reference_images", "image_url", "image"}},
+	{"image", []string{"image_urls", "reference_image_urls", "input_image_urls", "images", "input_images", "reference_images", "image_url", "input_image_url", "front_image_url", "image"}},
 	{"video", []string{"video_urls", "reference_video_urls", "videos", "video_url", "video"}},
 	{"audio", []string{"audio_urls", "reference_audio_urls", "audio_url", "audio"}},
 	{"mask", []string{"mask_url", "mask_image_url", "mask"}},

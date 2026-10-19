@@ -175,8 +175,14 @@ func TestFalFetch(t *testing.T) {
 		t.Errorf("gpt-image token price must not estimate without a token count: %+v", e)
 	}
 
-	if p := by["tripo3d/h3.1/multiview-to-3d"].Price; p.Unit != registry.UnitCredit || p.Note == "" {
-		t.Errorf("tripo credits: %+v", p)
+	// fal prices Tripo in credits; the page's per-option dollar prices replace
+	// that, with standard textures as the default and each option as a tier.
+	tripo := by["tripo3d/h3.1/multiview-to-3d"].Price
+	if tripo.Unit != registry.UnitRequest || tripo.ValueUSD == nil || *tripo.ValueUSD != 0.30 || tripo.Source != registry.SourcePage {
+		t.Errorf("tripo option price: %+v", tripo)
+	}
+	if e := registry.EstimateJob(tripo, registry.Job{Quality: "hd"}); e.USD == nil || *e.USD != 0.40 {
+		t.Errorf("tripo hd tier: %+v", e)
 	}
 	if p := by["fal-ai/hunyuan3d-v3/image-to-3d"].Price; p.Unit != registry.UnitRequest || *p.ValueUSD != 0.375 {
 		t.Errorf("hunyuan3d page request price: %+v", p)

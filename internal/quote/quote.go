@@ -142,15 +142,16 @@ func reject(r registry.Route, req Request) string {
 	if j.Aspect != "" && len(c.Aspects) > 0 && !containsFold(c.Aspects, j.Aspect) && !containsFold(c.Aspects, "adaptive") {
 		return fmt.Sprintf("aspect %s not in %v", j.Aspect, c.Aspects)
 	}
+	// A schema that maps a reference kind but states no maxItems leaves the
+	// limit unknown; only a schema with no field for that kind rules it out.
 	known := len(r.Schema) > 0
-	if msg := countLimit("image", req.Images, c.MaxImages, known); msg != "" {
-		return msg
-	}
-	if msg := countLimit("video", req.Videos, c.MaxVideos, known); msg != "" {
-		return msg
-	}
-	if msg := countLimit("audio", req.Audios, c.MaxAudios, known); msg != "" {
-		return msg
+	for _, k := range []struct {
+		kind  string
+		n, mx int
+	}{{"image", req.Images, c.MaxImages}, {"video", req.Videos, c.MaxVideos}, {"audio", req.Audios, c.MaxAudios}} {
+		if msg := countLimit(k.kind, k.n, k.mx, known && !mapsKind(r.ParamMap, k.kind)); msg != "" {
+			return msg
+		}
 	}
 	if req.VideoSecs > 0 && c.MaxVideoSecs > 0 && req.VideoSecs > float64(c.MaxVideoSecs) {
 		return fmt.Sprintf("reference video %.1fs longer than %ds", req.VideoSecs, c.MaxVideoSecs)
@@ -177,4 +178,10 @@ func containsFold(xs []string, x string) bool {
 		}
 	}
 	return false
+}
+
+func mapsKind(pm map[string]string, kind string) bool {
+	_, one := pm[kind]
+	_, many := pm[kind+"s"]
+	return one || many
 }
