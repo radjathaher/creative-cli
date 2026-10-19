@@ -1,0 +1,40 @@
+# GPT Image 2.5 Flare Edit
+
+> Precise image editing that changes only what's asked, keeping subject, composition, and background intact, with reference subjects staying recognizable across styles and successive edits.
+
+
+## Overview
+
+- **Endpoint**: `https://fal.run/openai/gpt-image-2.5/flare/edit`
+- **Model ID**: `openai/gpt-image-2.5/flare/edit`
+- **Category**: image-to-image
+- **Kind**: inference
+**Tags**: stylized, transform, editing
+
+
+
+## Pricing
+
+Text tokens (per 1M): **$5.00** input, **$1.25** cached, **$10.00** output.
+Image tokens (per 1M): **$8.00** input, **$2.00** cached, **$30.00** output. Changing the **quality** parameter significantly affects cost; by default we use **high**. Adjust it to your preference.
+See the description at the bottom of this page for more details on how much canonical image sizes cost. Total cost is rounded up to the closest hundredth of a cent ($0.0001).
+
+For more details, see [fal.ai pricing](https://fal.ai/pricing).
+
+## API Information
+
+This model can be used via our HTTP API or more conveniently via our client libraries.
+See the input and output schema below, as well as the usage examples.
+
+
+### Input Schema
+
+The API accepts the following input parameters:
+
+
+- **`prompt`** (`string`, _required_):
+  The prompt for image generation
+  - Examples: "Same workers, same beam, same lunch boxes - but they're all on their phones now. One is taking a selfie. One is on a call looking annoyed. Same danger, new priorities. A hard hat has AirPods."
+
+- **`image_urls`** (`list<string>`, _required_):
+  The URLs of the images to use as a reference for the generation. A maximum of 16 images are allowed.

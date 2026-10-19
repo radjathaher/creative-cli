@@ -1,0 +1,5 @@
+{
+  "_comment": "Owner routing policy: a family listed here is served only by these providers unless --all is passed. Decided 2026-10-19.",
+  "gpt-image-2": ["codex-lb", "openai"],
+  "gpt-image-2.5": ["openai"]
+}

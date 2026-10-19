@@ -1,0 +1,62 @@
+{
+  "models": [
+    {
+      "endpoint_id": "fal-ai/meshy/rigging",
+      "metadata": {
+        "display_name": "Meshy Rigging",
+        "category": "3d-to-3d",
+        "status": "active"
+      }
+    },
+    {
+      "endpoint_id": "fal-ai/elevenlabs/speech-to-text/scribe-v2",
+      "metadata": {
+        "display_name": "ElevenLabs Speech to Text - Scribe V2",
+        "category": "speech-to-text",
+        "status": "active"
+      }
+    },
+    {
+      "endpoint_id": "fal-ai/hunyuan3d-v3/image-to-3d",
+      "metadata": {
+        "display_name": "Hunyuan3d V3",
+        "category": "image-to-3d",
+        "status": "active"
+      }
+    },
+    {
+      "endpoint_id": "fal-ai/flux/dev",
+      "metadata": {
+        "display_name": "FLUX.1 [dev]",
+        "category": "text-to-image",
+        "status": "active"
+      }
+    },
+    {
+      "endpoint_id": "fal-ai/triposr",
+      "metadata": {
+        "display_name": "TripoSR",
+        "category": "image-to-3d",
+        "status": "active"
+      }
+    },
+    {
+      "endpoint_id": "fal-ai/bytedance-upscaler/upscale/video",
+      "metadata": {
+        "display_name": "Bytedance Upscaler Upscale Video",
+        "category": "video-to-video",
+        "status": "active"
+      }
+    },
+    {
+      "endpoint_id": "fal-ai/old-model/v1",
+      "metadata": {
+        "display_name": "Old",
+        "category": "text-to-image",
+        "status": "deprecated"
+      }
+    }
+  ],
+  "has_more": false,
+  "next_cursor": null
+}

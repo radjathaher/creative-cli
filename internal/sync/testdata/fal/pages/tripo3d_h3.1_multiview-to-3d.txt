@@ -1,0 +1,40 @@
+# Tripo H3.1 Multiview to 3D
+
+> Generate 3D models from multiple view images using Tripo H3.1.
+
+
+## Overview
+
+- **Endpoint**: `https://fal.run/tripo3d/h3.1/multiview-to-3d`
+- **Model ID**: `tripo3d/h3.1/multiview-to-3d`
+- **Category**: image-to-3d
+- **Kind**: inference
+**Tags**: 3d, multiview-to-3d, 3d-generation, tripo
+
+
+
+## Pricing
+
+Your request will cost $0.20 (without textures), $0.30 (with standard textures), or $0.40 (with HD textures), plus an additional $0.20 for detailed geometry and $0.05 for quad mesh if selected.
+
+For more details, see [fal.ai pricing](https://fal.ai/pricing).
+
+## API Information
+
+This model can be used via our HTTP API or more conveniently via our client libraries.
+See the input and output schema below, as well as the usage examples.
+
+
+### Input Schema
+
+The API accepts the following input parameters:
+
+
+- **`image_urls`** (`list<string>`, _required_):
+  2 to 4 image URLs of the same object from different angles. Order: [front, left, back, right]. Front view is required.
+  - Array of string
+  - Examples: ["https://v3b.fal.media/files/b/zebra/3osHJDI8IZ2wl6sGtEUeB_image.png","https://v3b.fal.media/files/b/zebra/3osHJDI8IZ2wl6sGtEUeB_image.png"]
+
+- **`face_limit`** (`integer`, _optional_):
+  Target number of faces for the generated mesh. If not set, the model adaptively determines the count.
+  - Range: `1000` to `2000000`

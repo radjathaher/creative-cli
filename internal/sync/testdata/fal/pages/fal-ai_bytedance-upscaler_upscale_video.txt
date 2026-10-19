@@ -1,0 +1,40 @@
+# Bytedance Upscaler Upscale Video
+
+> Upscale videos with Bytedance's video upscaler.
+
+
+## Overview
+
+- **Endpoint**: `https://fal.run/fal-ai/bytedance-upscaler/upscale/video`
+- **Model ID**: `fal-ai/bytedance-upscaler/upscale/video`
+- **Category**: video-to-video
+- **Kind**: inference
+**Tags**: upscaler, video, bytedance
+
+
+
+## Pricing
+
+Upscaling to 1080p costs $0.0072/s, 2K costs $0.0144/s, and 4K costs $0.0288/s, at a 30fps rate. Processing at 60fps doubles the cost for any resolution. Processing in `pro` mode makes the price 10 times of the normal price ($0.072/s, $0.144/s, $0.288/s for 1080p,2K, 4K at 30fps respectively, at 60fps these prices are further doubled.)
+
+For more details, see [fal.ai pricing](https://fal.ai/pricing).
+
+## API Information
+
+This model can be used via our HTTP API or more conveniently via our client libraries.
+See the input and output schema below, as well as the usage examples.
+
+
+### Input Schema
+
+The API accepts the following input parameters:
+
+
+- **`video_url`** (`string`, _required_):
+  The URL of the video to upscale.
+  - Examples: "https://storage.googleapis.com/falserverless/example_inputs/bytedance_video_upscaler_input.mp4"
+
+- **`target_resolution`** (`TargetResolutionEnum`, _optional_):
+  The target resolution of the video to upscale. Default value: `"1080p"`
+  - Default: `"1080p"`
+  - Options: `"1080p"`, `"2k"`, `"4k"`, `"6k"`, `"8k"`

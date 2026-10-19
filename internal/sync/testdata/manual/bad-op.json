@@ -1,0 +1,1 @@
+[{"id": "openai:x", "provider": "openai", "model_id": "x", "op": "image.paint", "family": "x", "price": {"unit": "image", "value_usd": 1, "source_url": "https://example.com"}}]

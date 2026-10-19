@@ -1,0 +1,40 @@
+# ElevenLabs Speech to Text - Scribe V2
+
+> Use Scribe-V2 from ElevenLabs to do blazingly fast speech to text inferences!
+
+
+## Overview
+
+- **Endpoint**: `https://fal.run/fal-ai/elevenlabs/speech-to-text/scribe-v2`
+- **Model ID**: `fal-ai/elevenlabs/speech-to-text/scribe-v2`
+- **Category**: speech-to-text
+- **Kind**: inference
+**Tags**: speech-to-text
+
+
+
+## Pricing
+
+Your request will cost **$0.008 per input audio minutes**. If keyterm is used, you request will cost %30 more.
+
+For more details, see [fal.ai pricing](https://fal.ai/pricing).
+
+## API Information
+
+This model can be used via our HTTP API or more conveniently via our client libraries.
+See the input and output schema below, as well as the usage examples.
+
+
+### Input Schema
+
+The API accepts the following input parameters:
+
+
+- **`audio_url`** (`string`, _required_):
+  URL of the audio file to transcribe
+  - Examples: "https://storage.googleapis.com/falserverless/example_inputs/elevenlabs/scribe_v2_in.mp3"
+
+- **`language_code`** (`string`, _optional_):
+  Language code of the audio
+  - Examples: "eng", "spa", "fra", "deu", "jpn"
+

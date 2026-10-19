@@ -1,0 +1,40 @@
+# Gemini Omni Flash 1.1 Reference to Video
+
+> Gemini Omni Flash 1.1 is Google's multimodal video model. This endpoint generates video from combined multimodal references, images, videos and text together. Reasoning across all inputs to produce a single coherent result, with characters retaining their face, clothing, and voice throughout
+
+
+## Overview
+
+- **Endpoint**: `https://fal.run/google/gemini-omni-flash/v1.1/reference-to-video`
+- **Model ID**: `google/gemini-omni-flash/v1.1/reference-to-video`
+- **Category**: image-to-video
+- **Kind**: inference
+**Tags**: stylized, transform, lipsync
+
+
+
+## Pricing
+
+Billing is calculated per second of output video, by resolution. For **360p**, your request will cost **$0.03** per second; for **720p**, **$0.10** per second; for **1080p**, **$0.15** per second; and for **4K**, **$0.30** per second. A 10-second **1080p** clip costs **$1.50**, while the same clip at **360p** costs **$0.30**. 
+
+For more details, see [fal.ai pricing](https://fal.ai/pricing).
+
+## API Information
+
+This model can be used via our HTTP API or more conveniently via our client libraries.
+See the input and output schema below, as well as the usage examples.
+
+
+### Input Schema
+
+The API accepts the following input parameters:
+
+
+- **`prompt`** (`string`, _required_):
+  The text prompt describing the video. Reference media is sent in list order before the prompt.
+  - Examples: "A cat inspired by <IMAGE_REF_0> walks through the setting in <VIDEO_REF_0>."
+
+- **`image_urls`** (`list<string>`, _optional_):
+  URLs of reference images to incorporate into the video.
+  - Array of string
+

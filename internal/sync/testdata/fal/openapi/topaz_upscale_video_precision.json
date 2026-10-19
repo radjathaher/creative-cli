@@ -1,0 +1,233 @@
+{
+  "openapi": "3.0.4",
+  "paths": {
+    "/topaz/upscale/video/precision": {
+      "post": {
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpscaleVideoPrecisionInput"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UpscaleVideoPrecisionInput": {
+        "title": "VideoPrecisionUpscaleRequest",
+        "type": "object",
+        "required": [
+          "video_url"
+        ],
+        "x-fal-order-properties": [
+          "video_url",
+          "model",
+          "upscale_factor",
+          "target_fps",
+          "compression",
+          "noise",
+          "halo",
+          "grain",
+          "recover_detail",
+          "H264_output"
+        ],
+        "properties": {
+          "halo": {
+            "anyOf": [
+              {
+                "maximum": 1,
+                "type": "number",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Halo",
+            "description": "Halo reduction level (0.0-1.0). Default varies by model."
+          },
+          "video_url": {
+            "title": "Video Url",
+            "description": "URL of the video to upscale",
+            "type": "string"
+          },
+          "upscale_factor": {
+            "default": 2,
+            "title": "Upscale Factor",
+            "maximum": 4,
+            "description": "Factor to upscale the video by (e.g. 2.0 doubles width and height)",
+            "type": "number",
+            "minimum": 1
+          },
+          "compression": {
+            "anyOf": [
+              {
+                "maximum": 1,
+                "type": "number",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Compression",
+            "description": "Compression artifact removal level (0.0-1.0). Default varies by model."
+          },
+          "H264_output": {
+            "default": false,
+            "title": "H264 Output",
+            "description": "Whether to use H264 codec for output video. Default is H265.",
+            "type": "boolean"
+          },
+          "grain": {
+            "anyOf": [
+              {
+                "maximum": 0.1,
+                "type": "number",
+                "minimum": 0,
+                "multipleOf": 0.01
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grain",
+            "description": "Film grain amount (0.0-0.1). Default varies by model."
+          },
+          "target_fps": {
+            "anyOf": [
+              {
+                "maximum": 60,
+                "type": "integer",
+                "minimum": 16
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Fps",
+            "description": "Target FPS for the output. Frame interpolation is enabled only when this differs from the source FPS."
+          },
+          "noise": {
+            "anyOf": [
+              {
+                "maximum": 1,
+                "type": "number",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Noise",
+            "description": "Noise reduction level (0.0-1.0). Default varies by model."
+          },
+          "model": {
+            "default": "Proteus",
+            "title": "Model",
+            "description": "Precision (non-generative) enhancement model. Proteus fits most real-world footage; Proteus Natural is a softer variant; Iris recovers faces; Dione deinterlaces legacy/interlaced sources; Artemis denoises and sharpens degraded footage; Gaia refines high-quality footage and CG (Gaia 2 upscales animation at 2x); Rhea maximizes fine detail via an internal 4x pass; Theia gives manual detail/fidelity control.",
+            "type": "string",
+            "enum": [
+              "Proteus",
+              "Proteus Natural",
+              "Iris",
+              "Iris Low Quality",
+              "Dione DV",
+              "Dione TV",
+              "Dione Robust",
+              "Dione Dehalo",
+              "Dione Robust Dehalo",
+              "Artemis High Quality",
+              "Artemis Medium Quality",
+              "Artemis Low Quality",
+              "Artemis Strong Halo",
+              "Artemis Medium Halo",
+              "Artemis Aliasing & Moire",
+              "Gaia HQ",
+              "Gaia CG",
+              "Gaia 2",
+              "Rhea",
+              "Theia Fine Tune Detail",
+              "Theia Fine Tune Fidelity"
+            ]
+          },
+          "recover_detail": {
+            "anyOf": [
+              {
+                "maximum": 1,
+                "type": "number",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recover Detail",
+            "description": "Recover original detail level (0.0-1.0). Higher values preserve more original detail."
+          }
+        }
+      },
+      "File": {
+        "title": "File",
+        "type": "object",
+        "required": [
+          "url"
+        ],
+        "x-fal-order-properties": [
+          "url",
+          "content_type",
+          "file_name",
+          "file_size"
+        ],
+        "properties": {
+          "content_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content Type",
+            "description": "The mime type of the file."
+          },
+          "file_size": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File Size",
+            "description": "The size of the file in bytes."
+          },
+          "file_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File Name",
+            "description": "The name of the file. It will be auto-generated if not provided."
+          },
+          "url": {
+            "title": "Url",
+            "description": "The URL where the file can be downloaded from.",
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

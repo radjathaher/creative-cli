@@ -38,6 +38,25 @@ func resolveImageBackend() (imageBackend, error) {
 	return checkedImageBackend("codex-lb", base, key)
 }
 
+// pinnedImageBackend resolves an explicitly chosen backend, or the legacy
+// Codex-LB-first resolution when none is chosen.
+func pinnedImageBackend(name string) (imageBackend, error) {
+	switch name {
+	case "":
+		return resolveImageBackend()
+	case "openai":
+		return directImageBackend()
+	case "codex-lb":
+		base := strings.TrimSpace(os.Getenv("CODEX_LB_BASE_URL"))
+		key, _ := core.ReadSecret("CODEX_LB_API_KEY")
+		if base == "" || key == "" {
+			return imageBackend{}, fmt.Errorf("codex-lb route needs CODEX_LB_BASE_URL and CODEX_LB_API_KEY")
+		}
+		return checkedImageBackend("codex-lb", base, key)
+	}
+	return imageBackend{}, fmt.Errorf("unknown image backend %q", name)
+}
+
 func directImageBackend() (imageBackend, error) {
 	key, err := core.ReadSecret("OPENAI_API_KEY")
 	if err != nil {

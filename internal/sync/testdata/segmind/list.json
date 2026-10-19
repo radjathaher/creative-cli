@@ -1,0 +1,1511 @@
+{
+  "Inference Model Information List": [
+    {
+      "slug": "elevenlabs-v4-tts",
+      "title": "ElevenLabs Eleven v4 Text to Speech",
+      "type": "textToAudio",
+      "average_cost": 0.017953698039215687,
+      "is_depreciated": false,
+      "coming_soon": false,
+      "parameters_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "required": [
+          "prompt",
+          "voice_id"
+        ],
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "title": "Text",
+            "description": "Text to speak, up to 10,000 characters. Audio tags in square brackets ([whispers], [laughs], [sighs], [shouting]) are performed, not read. Write a pronunciation inline in IPA between slashes, e.g. /ˈæksəl/.",
+            "default": "[booming] Ladies and gentlemen, welcome — welcome one and all — to the Carrington Brothers Travelling Circus! [whispers] Now, lean in close... for what you are about to see has never once been attempted on this side of the Mississippi. [curious] Can a single acrobat truly cross forty feet of wire with no net below? [laughs] Our Madame Cheng says yes — and tonight, on her two-hundredth performance, she intends to prove it. [softly] So hush now. Hold your breath. And keep your eyes on the light.",
+            "x-ui-metadata": {
+              "order": 0
+            }
+          },
+          "voice_id": {
+            "type": "string",
+            "title": "Voice",
+            "description": "An ElevenLabs voice id: a premade voice, a Voice Library voice, or one you cloned or designed on Segmind.",
+            "default": "JBFqnCBsd6RMkjVDRZzb",
+            "x-ui-metadata": {
+              "order": 1,
+              "api-dropdown": {
+                "endpoint": "/api/voices",
+                "authType": "mixed",
+                "method": "GET",
+                "cacheTime": 300000,
+                "allowCustom": true,
+                "searchEndpoint": "/api/voices/search",
+                "detailEndpoint": "/api/voices",
+                "params": {
+                  "provider": "elevenlabs"
+                }
+              }
+            }
+          },
+          "model_id": {
+            "type": "string",
+            "title": "Model",
+            "description": "Eleven v4 for the highest quality; v4 Turbo for lower latency (real-time and agents). Both cost the same per character.",
+            "default": "eleven_v4",
+            "oneOf": [
+              {
+                "const": "eleven_v4",
+                "title": "Eleven v4"
+              },
+              {
+                "const": "eleven_v4_turbo",
+                "title": "Eleven v4 Turbo"
+              }
+            ],
+            "x-ui-metadata": {
+              "order": 2
+            }
+          },
+          "stability": {
+            "type": "number",
+            "title": "Stability",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.5,
+            "description": "Lower is more expressive and varied, higher is steadier.",
+            "x-ui-metadata": {
+              "order": 3,
+              "advanced": true
+            }
+          },
+          "similarity_boost": {
+            "type": "number",
+            "title": "Similarity",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.75,
+            "description": "How closely the output follows the voice sample.",
+            "x-ui-metadata": {
+              "order": 4,
+              "advanced": true
+            }
+          },
+          "language_code": {
+            "type": "string",
+            "title": "Language",
+            "description": "Optional ISO 639-1 code (en, hi, es, ...) to force the output language.",
+            "x-ui-metadata": {
+              "order": 5,
+              "advanced": true
+            }
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed",
+            "minimum": 0,
+            "maximum": 4294967295,
+            "description": "Best-effort determinism: the same seed and inputs give similar audio.",
+            "x-ui-metadata": {
+              "order": 6,
+              "advanced": true
+            }
+          },
+          "output_format": {
+            "type": "string",
+            "title": "Output format",
+            "default": "mp3_44100_128",
+            "oneOf": [
+              {
+                "const": "mp3_44100_128",
+                "title": "MP3 44.1 kHz 128 kbps"
+              },
+              {
+                "const": "mp3_44100_192",
+                "title": "MP3 44.1 kHz 192 kbps"
+              },
+              {
+                "const": "opus_48000_128",
+                "title": "Opus 48 kHz 128 kbps"
+              },
+              {
+                "const": "wav_44100",
+                "title": "WAV 44.1 kHz"
+              },
+              {
+                "const": "wav_24000",
+                "title": "WAV 24 kHz"
+              }
+            ],
+            "x-ui-metadata": {
+              "order": 7,
+              "advanced": true
+            }
+          },
+          "previous_text": {
+            "type": "string",
+            "title": "Previous text",
+            "description": "Text spoken just before this clip, for smooth continuity across clips (not spoken).",
+            "x-ui-metadata": {
+              "order": 8,
+              "advanced": true
+            }
+          },
+          "next_text": {
+            "type": "string",
+            "title": "Next text",
+            "description": "Text spoken just after this clip (not spoken).",
+            "x-ui-metadata": {
+              "order": 9,
+              "advanced": true
+            }
+          }
+        },
+        "examples": [
+          {
+            "prompt": "[booming] Ladies and gentlemen, welcome — welcome one and all — to the Carrington Brothers Travelling Circus! [whispers] Now, lean in close... for what you are about to see has never once been attempted on this side of the Mississippi. [curious] Can a single acrobat truly cross forty feet of wire with no net below? [laughs] Our Madame Cheng says yes — and tonight, on her two-hundredth performance, she intends to prove it. [softly] So hush now. Hold your breath. And keep your eyes on the light.",
+            "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+            "model_id": "eleven_v4",
+            "stability": 0.5,
+            "similarity_boost": 0.75,
+            "output_format": "mp3_44100_128"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "gpt-image-2.5-flare",
+      "title": "GPT Image 2.5 Flare",
+      "type": "textToImage",
+      "average_cost": 0.056889669573400255,
+      "is_depreciated": false,
+      "coming_soon": false,
+      "parameters_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "title": "Prompt",
+            "description": "Text describing the image. Supports in-image typography across scripts — lead with subject, style, lighting.",
+            "default": "A photoreal product photograph of a frosted glass bottle of artisanal hot sauce standing on a weathered wooden market stall, with three fresh red habanero peppers and a halved lime beside it. The wraparound kraft-paper label reads, in bold condensed serif lettering: 'EMBER & ASH' across the top, 'Smoked Habanero Hot Sauce' as the tagline beneath it, a small legible line 'habanero · smoked paprika · lime · sea salt', and '148 ml' in the lower corner. Condensation beads on the glass, a red wax-sealed cork, visible paper grain on the label, bright even daylight.",
+            "minLength": 1,
+            "x-ui-metadata": {
+              "order": 0,
+              "advanced": false,
+              "hidden": false,
+              "placeholder": "Describe the image you want to create"
+            }
+          },
+          "image_urls": {
+            "type": "array",
+            "title": "Reference images",
+            "description": "Optional reference images to edit or draw context from. Providing any image switches to edit mode.",
+            "default": [],
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "x-file-metadata": {
+                "allowed-types": [
+                  "image/*"
+                ]
+              }
+            },
+            "x-ui-metadata": {
+              "order": 1,
+              "advanced": false,
+              "hidden": false
+            }
+          },
+          "size": {
+            "type": "string",
+            "title": "Size",
+            "description": "Output resolution (WIDTHxHEIGHT). Each edge must be a multiple of 16, aspect ratio between 1:3 and 3:1, longest edge at most 3840, and total pixels between 655,360 and 8,294,400. \"Auto\" lets the model pick.",
+            "default": "1024x1536",
+            "oneOf": [
+              {
+                "const": "1024x1024",
+                "title": "1024x1024"
+              },
+              {
+                "const": "1536x1024",
+                "title": "1536x1024"
+              },
+              {
+                "const": "1024x1536",
+                "title": "1024x1536"
+              },
+              {
+                "const": "1280x960",
+                "title": "1280x960"
+              },
+              {
+                "const": "960x1280",
+                "title": "960x1280"
+              },
+              {
+                "const": "1536x864",
+                "title": "1536x864"
+              },
+              {
+                "const": "864x1536",
+                "title": "864x1536"
+              },
+              {
+                "const": "2048x2048",
+                "title": "2048x2048"
+              },
+              {
+                "const": "2048x1152",
+                "title": "2048x1152"
+              },
+              {
+                "const": "1152x2048",
+                "title": "1152x2048"
+              },
+              {
+                "const": "3840x2160",
+                "title": "3840x2160"
+              },
+              {
+                "const": "2160x3840",
+                "title": "2160x3840"
+              },
+              {
+                "const": "auto",
+                "title": "Auto"
+              }
+            ],
+            "x-ui-metadata": {
+              "order": 2,
+              "advanced": false,
+              "hidden": false
+            }
+          },
+          "mask_image_url": {
+            "type": "string",
+            "title": "Mask image",
+            "description": "Optional mask for surgical inpainting, used only alongside a reference image. Must be a PNG with an alpha channel, matching the reference image's dimensions: the transparent areas are regenerated, everything opaque stays pixel-perfect. A flat black-and-white mask with no alpha channel is rejected.",
+            "format": "uri",
+            "x-file-metadata": {
+              "allowed-types": [
+                "image/*"
+              ]
+            },
+            "x-ui-metadata": {
+              "order": 3,
+              "advanced": false,
+              "hidden": false,
+              "is-mask": true,
+              "mask-for": "image_urls",
+              "mask-mode": "alpha"
+            }
+          },
+          "quality": {
+            "type": "string",
+            "title": "Quality",
+            "description": "Rendering fidelity. \"High\" keeps typography crisp; use lower values only for previews.",
+            "default": "high",
+            "oneOf": [
+              {
+                "const": "low",
+                "title": "Low"
+              },
+              {
+                "const": "medium",
+                "title": "Medium"
+              },
+              {
+                "const": "high",
+                "title": "High"
+              },
+              {
+                "const": "auto",
+                "title": "Auto"
+              }
+            ],
+            "x-ui-metadata": {
+              "order": 4,
+              "advanced": true,
+              "hidden": false
+            }
+          },
+          "background": {
+            "type": "string",
+            "title": "Background",
+            "description": "\"Opaque\" renders a filled background; \"Transparent\" returns a PNG or WEBP with an alpha channel; \"Auto\" lets the model decide.",
+            "default": "opaque",
+            "oneOf": [
+              {
+                "const": "opaque",
+                "title": "Opaque"
+              },
+              {
+                "const": "transparent",
+                "title": "Transparent"
+              },
+              {
+                "const": "auto",
+                "title": "Auto"
+              }
+            ],
+            "x-ui-metadata": {
+              "order": 5,
+              "advanced": true,
+              "hidden": false
+            }
+          },
+          "moderation": {
+            "type": "string",
+            "title": "Moderation",
+            "description": "Content filter strictness. \"Auto\" is the safe default.",
+            "default": "auto",
+            "oneOf": [
+              {
+                "const": "low",
+                "title": "Low"
+              },
+              {
+                "const": "auto",
+                "title": "Auto"
+              }
+            ],
+            "x-ui-metadata": {
+              "order": 6,
+              "advanced": true,
+              "hidden": false
+            }
+          },
+          "output_format": {
+            "type": "string",
+            "title": "Output format",
+            "description": "\"PNG\" for crisp text, \"WEBP\" for smaller size, \"JPEG\" for broad compatibility.",
+            "default": "png",
+            "oneOf": [
+              {
+                "const": "png",
+                "title": "PNG"
+              },
+              {
+                "const": "jpeg",
+                "title": "JPEG"
+              },
+              {
+                "const": "webp",
+                "title": "WEBP"
+              }
+            ],
+            "x-ui-metadata": {
+              "order": 7,
+              "advanced": true,
+              "hidden": false
+            }
+          },
+          "output_compression": {
+            "type": "integer",
+            "title": "Output compression",
+            "description": "Compression level 0-100. 100 preserves text crispness; lower values reduce file size.",
+            "default": 100,
+            "minimum": 0,
+            "maximum": 100,
+            "x-ui-metadata": {
+              "order": 8,
+              "advanced": true,
+              "hidden": false
+            }
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "examples": [
+          {
+            "prompt": "A photoreal product photograph of a frosted glass bottle of artisanal hot sauce standing on a weathered wooden market stall, with three fresh red habanero peppers and a halved lime beside it. The wraparound kraft-paper label reads, in bold condensed serif lettering: 'EMBER & ASH' across the top, 'Smoked Habanero Hot Sauce' as the tagline beneath it, a small legible line 'habanero · smoked paprika · lime · sea salt', and '148 ml' in the lower corner. Condensation beads on the glass, a red wax-sealed cork, visible paper grain on the label, bright even daylight.",
+            "image_urls": [],
+            "size": "1024x1536",
+            "quality": "high",
+            "background": "opaque",
+            "moderation": "auto",
+            "output_format": "png",
+            "output_compression": 100
+          }
+        ]
+      }
+    },
+    {
+      "slug": "gemini-omni-1.1",
+      "title": "Gemini Omni 1.1",
+      "type": "textToVideo",
+      "average_cost": 0.9379410172222219,
+      "is_depreciated": false,
+      "coming_soon": false,
+      "parameters_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "title": "Prompt",
+            "description": "Describe the scene, subjects, camera moves and sound design. Supports bracketed timecodes like [0-3s] ... [3-6s], and <IMAGE_REF_0>, <IMAGE_REF_1>, ... to bind reference images.",
+            "x-ui-metadata": {
+              "order": 0,
+              "component": "textarea"
+            },
+            "default": "Cinematic drone shot gliding through misty pine mountains at sunrise, god rays breaking through the fog, birdsong and gentle wind in the audio, photorealistic, highly detailed."
+          },
+          "first_frame": {
+            "type": "string",
+            "title": "First Frame",
+            "description": "The video starts exactly from this image.",
+            "format": "uri",
+            "x-file-metadata": {
+              "allowed-types": [
+                "image/*"
+              ]
+            },
+            "x-ui-metadata": {
+              "order": 1,
+              "advanced": false,
+              "hidden": false,
+              "mode-group": "First & last frame"
+            }
+          },
+          "last_frame": {
+            "type": "string",
+            "title": "Last Frame",
+            "description": "Optional ending frame. With First Frame set, the model interpolates smoothly between the two.",
+            "format": "uri",
+            "x-file-metadata": {
+              "allowed-types": [
+                "image/*"
+              ]
+            },
+            "x-ui-metadata": {
+              "order": 2,
+              "advanced": false,
+              "hidden": false,
+              "mode-group": "First & last frame"
+            }
+          },
+          "reference_images": {
+            "type": "array",
+            "title": "Reference Images",
+            "description": "1-10 reference images. Subjects/styles are extracted and embedded into a new scene (not used as literal frames). Bind them in the prompt with <IMAGE_REF_0>, <IMAGE_REF_1>, ... Cannot be combined with First/Last Frame.",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "x-file-metadata": {
+                "allowed-types": [
+                  "image/*"
+                ]
+              }
+            },
+            "minItems": 1,
+            "maxItems": 10,
+            "x-ui-metadata": {
+              "order": 3,
+              "advanced": false,
+              "hidden": false,
+              "mode-group": "Reference media"
+            }
+          },
+          "duration": {
+            "type": "integer",
+            "title": "Duration (s)",
+            "description": "Video length in seconds (3-10). Billed per second of output video.",
+            "default": 5,
+            "minimum": 3,
+            "maximum": 10,
+            "x-ui-metadata": {
+              "order": 4,
+              "affectsPricing": true
+            }
+          },
+          "resolution": {
+            "type": "string",
+            "title": "Resolution",
+            "description": "Output resolution. 360p is a draft tier (~1/3 the price, ~2x faster); 1080p costs 1.5x and 4k 3x the 720p rate per second.",
+            "default": "720p",
+            "oneOf": [
+              {
+                "const": "360p",
+                "title": "360p (draft)"
+              },
+              {
+                "const": "720p",
+                "title": "720p"
+              },
+              {
+                "const": "1080p",
+                "title": "1080p"
+              },
+              {
+                "const": "4k",
+                "title": "4K"
+              }
+            ],
+            "x-ui-metadata": {
+              "order": 5,
+              "affectsPricing": true
+            }
+          },
+          "aspect_ratio": {
+            "type": "string",
+            "title": "Aspect Ratio",
+            "description": "16:9 landscape or 9:16 vertical.",
+            "default": "16:9",
+            "oneOf": [
+              {
+                "const": "16:9",
+                "title": "16:9"
+              },
+              {
+                "const": "9:16",
+                "title": "9:16"
+              }
+            ],
+            "x-ui-metadata": {
+              "order": 6
+            }
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed",
+            "description": "Seed for reproducible generation. -1 for random.",
+            "default": -1,
+            "minimum": -1,
+            "maximum": 999999999999999,
+            "x-ui-metadata": {
+              "order": 7,
+              "advanced": true
+            }
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "examples": [
+          {
+            "prompt": "Cinematic slow-motion close-up of powerful ocean waves crashing against dark volcanic rocks at golden sunset, white sea spray bursting into the air, the deep thunderous crash of each wave and distant seagull calls perfectly synchronized with the motion, warm rim light, photorealistic, highly detailed, shallow depth of field.",
+            "duration": 5,
+            "resolution": "720p",
+            "aspect_ratio": "16:9"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "seedance-2.5",
+      "title": "Seedance 2.5",
+      "type": "imageToVideo",
+      "average_cost": 2.760340075942827,
+      "is_depreciated": false,
+      "coming_soon": false,
+      "parameters_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "title": "Prompt",
+            "description": "Text describing the video. Use Shot 1:, Shot 2: for multi-shot sequences. Reference uploaded assets as '@Image 1', '@Video 1', '@Audio 1' in your prompt.",
+            "x-ui-metadata": {
+              "order": 0,
+              "advanced": false,
+              "hidden": false
+            }
+          },
+          "first_frame_url": {
+            "type": "string",
+            "title": "First Frame Image",
+            "format": "uri",
+            "description": "Starting frame image URL for image-to-video. Animates outward from this reference. Note: images with real human faces are blocked by ByteDance content policy. Cannot be used together with reference_images.",
+            "x-file-metadata": {
+              "allowed-types": [
+                "image/*"
+              ]
+            },
+            "x-ui-metadata": {
+              "order": 1,
+              "advanced": false,
+              "hidden": false,
+              "mode-group": "First & last frame"
+            }
+          },
+          "last_frame_url": {
+            "type": "string",
+            "title": "Last Frame Image",
+            "format": "uri",
+            "description": "Ending frame; requires first_frame_url. Guides transitions between two frames.",
+            "x-file-metadata": {
+              "allowed-types": [
+                "image/*"
+              ]
+            },
+            "x-ui-metadata": {
+              "order": 2,
+              "advanced": false,
+              "hidden": false,
+              "mode-group": "First & last frame"
+            }
+          },
+          "reference_images": {
+            "type": "array",
+            "title": "Reference Images",
+            "description": "Up to 30 reference images (max 30MB each) for character/style consistency. Cite as '@Image 1', '@Image 2' in your prompt. Cannot be used together with first_frame_url.",
+            "maxItems": 30,
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "x-file-metadata": {
+                "allowed-types": [
+                  "image/*"
+                ]
+              }
+            },
+            "x-ui-metadata": {
+              "order": 3,
+              "advanced": false,
+              "hidden": false,
+              "mode-group": "Reference media"
+            }
+          },
+          "reference_videos": {
+            "type": "array",
+            "title": "Reference Videos",
+            "description": "Up to 10 reference videos (2-30 seconds each, 30 seconds combined, mp4/mov, max 200MB each) for motion/style transfer. Cite as '@Video 1' in your prompt. Requests with reference videos are billed at the video-input token rate.",
+            "maxItems": 10,
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "x-file-metadata": {
+                "allowed-types": [
+                  "video/mp4",
+                  "video/quicktime"
+                ]
+              }
+            },
+            "x-ui-metadata": {
+              "order": 4,
+              "advanced": false,
+              "hidden": false,
+              "mode-group": "Reference media"
+            }
+          },
+          "reference_audios": {
+            "type": "array",
+            "title": "Reference Audios",
+            "description": "Up to 10 reference audio files (MP3, 2-30 seconds each, 30 seconds combined, max 15MB each). Cite as '@Audio 1' in your prompt. Audio-only reference is supported on seedance-2.5.",
+            "maxItems": 10,
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "x-file-metadata": {
+                "allowed-types": [
+                  "audio/mpeg"
+                ]
+              }
+            },
+            "x-ui-metadata": {
+              "order": 5,
+              "advanced": true,
+              "hidden": false,
+              "mode-group": "Reference media"
+            }
+          },
+          "duration": {
+            "type": "integer",
+            "title": "Duration",
+            "default": 5,
+            "description": "Video length in seconds (4-30), or -1 to let the model choose. Video-editing prompts require -1 (output follows the input video, which must be 4-30s). Cost scales with output duration (token-based).",
+            "x-ui-metadata": {
+              "order": 6,
+              "advanced": false,
+              "hidden": false
+            },
+            "oneOf": [
+              {
+                "const": -1,
+                "title": "Auto (use for video edits)"
+              },
+              {
+                "const": 4,
+                "title": "4s"
+              },
+              {
+                "const": 5,
+                "title": "5s"
+              },
+              {
+                "const": 6,
+                "title": "6s"
+              },
+              {
+                "const": 7,
+                "title": "7s"
+              },
+              {
+                "const": 8,
+                "title": "8s"
+              },
+              {
+                "const": 9,
+                "title": "9s"
+              },
+              {
+                "const": 10,
+                "title": "10s"
+              },
+              {
+                "const": 11,
+                "title": "11s"
+              },
+              {
+                "const": 12,
+                "title": "12s"
+              },
+              {
+                "const": 13,
+                "title": "13s"
+              },
+              {
+                "const": 14,
+                "title": "14s"
+              },
+              {
+                "const": 15,
+                "title": "15s"
+              },
+              {
+                "const": 16,
+                "title": "16s"
+              },
+              {
+                "const": 17,
+                "title": "17s"
+              },
+              {
+                "const": 18,
+                "title": "18s"
+              },
+              {
+                "const": 19,
+                "title": "19s"
+              },
+              {
+                "const": 20,
+                "title": "20s"
+              },
+              {
+                "const": 21,
+                "title": "21s"
+              },
+              {
+                "const": 22,
+                "title": "22s"
+              },
+              {
+                "const": 23,
+                "title": "23s"
+              },
+              {
+                "const": 24,
+                "title": "24s"
+              },
+              {
+                "const": 25,
+                "title": "25s"
+              },
+              {
+                "const": 26,
+                "title": "26s"
+              },
+              {
+                "const": 27,
+                "title": "27s"
+              },
+              {
+                "const": 28,
+                "title": "28s"
+              },
+              {
+                "const": 29,
+                "title": "29s"
+              },
+              {
+                "const": 30,
+                "title": "30s"
+              }
+            ]
+          },
+          "resolution": {
+            "type": "string",
+            "title": "Resolution",
+            "default": "720p",
+            "description": "Output resolution. seedance-2.5 supports 480p, 720p and 1080p (24fps). Use 480p for drafts and fast iteration, 720p for final renders, 1080p for the highest fidelity (10-bit colour). Higher resolution costs more (token-based).",
+            "oneOf": [
+              {
+                "const": "480p",
+                "title": "480p"
+              },
+              {
+                "const": "720p",
+                "title": "720p"
+              },
+              {
+                "const": "1080p",
+                "title": "1080p"
+              }
+            ],
+            "x-ui-metadata": {
+              "order": 7,
+              "advanced": false,
+              "hidden": false
+            }
+          },
+          "aspect_ratio": {
+            "type": "string",
+            "title": "Aspect Ratio",
+            "default": "adaptive",
+            "description": "Output aspect ratio. Defaults to adaptive, which lets the model match the prompt or the input media. adaptive is the only value accepted when you supply first_frame_url, or when the prompt asks for a video edit or extension — the output keeps the geometry of the input in those cases. Pick a fixed ratio (16:9 landscape, 9:16 vertical, 21:9 ultrawide) for text-to-video or plain reference-to-video.",
+            "oneOf": [
+              {
+                "const": "16:9",
+                "title": "16:9"
+              },
+              {
+                "const": "9:16",
+                "title": "9:16"
+              },
+              {
+                "const": "1:1",
+                "title": "1:1"
+              },
+              {
+                "const": "4:3",
+                "title": "4:3"
+              },
+              {
+                "const": "3:4",
+                "title": "3:4"
+              },
+              {
+                "const": "21:9",
+                "title": "21:9"
+              },
+              {
+                "const": "adaptive",
+                "title": "adaptive"
+              }
+            ],
+            "x-ui-metadata": {
+              "order": 8,
+              "advanced": false,
+              "hidden": false
+            }
+          },
+          "generate_audio": {
+            "type": "boolean",
+            "title": "Generate Audio",
+            "default": true,
+            "description": "Co-generate synchronized audio (dialogue, SFX, ambient, music) in the same pass. Best for scenes with speech, nature sounds, or music.",
+            "x-ui-metadata": {
+              "order": 9,
+              "advanced": true,
+              "hidden": false
+            }
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed",
+            "default": 42,
+            "minimum": -1,
+            "maximum": 2147483647,
+            "description": "Reproducibility seed. Use -1 for random output, set a fixed value to iterate on the same scene.",
+            "x-ui-metadata": {
+              "order": 10,
+              "advanced": true,
+              "hidden": false
+            }
+          },
+          "return_last_frame": {
+            "type": "boolean",
+            "title": "Return Last Frame",
+            "default": false,
+            "description": "Returns the final video frame as a separate image, delivered in the response as `video.last_frame_url`. Chain shots by feeding that URL into the next generation's `first_frame_url`. Note this is an output: it is distinct from the `last_frame_url` input parameter, which is an image you supply to steer how the clip ends.",
+            "x-ui-metadata": {
+              "order": 11,
+              "advanced": true,
+              "hidden": false
+            }
+          },
+          "skip_moderation": {
+            "type": "boolean",
+            "title": "Skip Moderation",
+            "default": true,
+            "description": "Bypass BytePlus content moderation pre-filter. Useful when generating artistic content or faces that may trigger false positives. Baseline BytePlus safety policies still apply.",
+            "x-ui-metadata": {
+              "order": 12,
+              "advanced": true,
+              "hidden": false
+            }
+          },
+          "bitrate_mode": {
+            "type": "string",
+            "title": "Bitrate Mode",
+            "default": "standard",
+            "description": "Output video encoding bitrate. 'standard' gives smaller files and faster downloads; 'high' produces ~5-6x higher bitrate for better visual fidelity and fewer compression artifacts (larger files). Does not affect price.",
+            "oneOf": [
+              {
+                "const": "standard",
+                "title": "Standard"
+              },
+              {
+                "const": "high",
+                "title": "High"
+              }
+            ],
+            "x-ui-metadata": {
+              "order": 13,
+              "advanced": true,
+              "hidden": false
+            }
+          },
+          "output_format": {
+            "type": "string",
+            "title": "Output Format",
+            "default": "mp4",
+            "enum": [
+              "mp4",
+              "mov"
+            ],
+            "description": "mp4 = best compatibility. mov (H.264 + yuv444p + PCM) = higher color fidelity; recommended for video editing/extension round-trips.",
+            "x-ui-metadata": {
+              "order": 14,
+              "advanced": true,
+              "hidden": false
+            }
+          },
+          "auto_resize": {
+            "type": "boolean",
+            "title": "Auto Resize Inputs",
+            "default": true,
+            "description": "Automatically resizes an input image that falls outside the provider's accepted range (300-6000px per side, aspect ratio 0.4-2.5, 30MB) so the request succeeds instead of being rejected. Aspect ratio is preserved: oversized images are downscaled, undersized ones upscaled, and out-of-band ratios padded rather than cropped. On by default - set it to false to have the provider reject out-of-range images instead. When a resize happens the response carries an X-Input-Normalized header naming the field and the before/after dimensions.",
+            "x-ui-metadata": {
+              "order": 15,
+              "advanced": true,
+              "hidden": false
+            }
+          },
+          "output_codec": {
+            "type": "string",
+            "title": "Output Codec",
+            "default": "auto",
+            "enum": [
+              "auto",
+              "h264"
+            ],
+            "description": "Codec of the delivered file. 'auto' returns the model's own encode untouched - for seedance-2.5 at 1080p that is 10-bit HEVC, the highest-fidelity master, which Chrome and Firefox on Windows cannot decode and will play as audio over a blank frame. 'h264' re-encodes it to H.264 High 8-bit yuv420p, which plays everywhere, at the cost of one additional generation of compression and half the bit depth; pick it for browser embeds and previews, and leave it on 'auto' when the file goes into an edit or grade. Output that is already H.264 (720p, 480p, the 2.0 series) is never re-encoded either way. Adds a few seconds when it applies, and does not affect price.",
+            "x-ui-metadata": {
+              "order": 16,
+              "advanced": true,
+              "hidden": false
+            }
+          },
+          "region": {
+            "type": "string",
+            "title": "Region",
+            "default": "default",
+            "description": "Where the video is generated. 'default' uses the model's standard deployment with the full feature set. 'us' runs on a US-hosted deployment: image-to-video only (first_frame_url required, optional last_frame_url), 480p or 720p, no reference media, and it is priced separately — see the Pricing tab.",
+            "oneOf": [
+              {
+                "const": "default",
+                "title": "Default"
+              },
+              {
+                "const": "us",
+                "title": "US"
+              }
+            ],
+            "x-ui-metadata": {
+              "advanced": true,
+              "hidden": false,
+              "order": 17
+            }
+          },
+          "draft": {
+            "type": "boolean",
+            "title": "Draft",
+            "default": false,
+            "description": "Render a 480p draft of this shot. Drafts bill at the normal 480p rate and return a draft_task_id (response header X-Draft-Task-ID, or video.draft_task_id on /v2). Send that id to seedance-2.5-draft-final within 7 days to render the same shot at 1080p, keeping its structure and motion. resolution must be 480p or omitted when draft is true.",
+            "x-ui-metadata": {
+              "order": 18,
+              "advanced": true,
+              "hidden": false
+            }
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "examples": [
+          {
+            "prompt": "The camera slowly pushes in toward the powerful cascading waterfall. Mist drifts and swirls through the golden sunlight, water rushes and splashes over the mossy rocks, and lush ferns sway gently in the breeze while a few birds glide across the gorge. Smooth, steady cinematic camera motion, photorealistic, natural ambient sound of rushing water, gentle wind, and distant birdsong.",
+            "first_frame_url": "https://segmind-resources.s3.amazonaws.com/input/seedance-2.5-firstframe.jpg",
+            "last_frame_url": "",
+            "reference_images": [],
+            "reference_videos": [],
+            "reference_audios": [],
+            "duration": 5,
+            "resolution": "720p",
+            "aspect_ratio": "adaptive",
+            "generate_audio": true,
+            "seed": 42,
+            "return_last_frame": false,
+            "skip_moderation": false,
+            "bitrate_mode": "standard"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "veed-subtitles",
+      "title": "VEED Subtitles",
+      "type": "videoToVideo",
+      "average_cost": 0.143,
+      "is_depreciated": false,
+      "coming_soon": false,
+      "parameters_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "video_url": {
+            "type": "string",
+            "title": "Video",
+            "format": "uri",
+            "description": "The video to subtitle.",
+            "x-file-metadata": {
+              "allowed-types": [
+                "video/*"
+              ]
+            },
+            "x-ui-metadata": {
+              "order": 0
+            }
+          },
+          "preset": {
+            "type": "string",
+            "title": "Style Preset",
+            "default": "simple",
+            "description": "Subtitle style. Dynamic presets (glass, whisper, glide, glide2, fusion, terminal, handwritten, backdrop, backdrop2) bill 2x.",
+            "oneOf": [
+              {
+                "const": "simple",
+                "title": "simple"
+              },
+              {
+                "const": "plain",
+                "title": "plain"
+              },
+              {
+                "const": "beans",
+                "title": "beans"
+              },
+              {
+                "const": "corpo",
+                "title": "corpo"
+              },
+              {
+                "const": "boo",
+                "title": "boo"
+              },
+              {
+                "const": "shadeplay",
+                "title": "shadeplay"
+              },
+              {
+                "const": "casper",
+                "title": "casper"
+              },
+              {
+                "const": "capri",
+                "title": "capri"
+              },
+              {
+                "const": "lowkey",
+                "title": "lowkey"
+              },
+              {
+                "const": "vinta",
+                "title": "vinta"
+              },
+              {
+                "const": "diego",
+                "title": "diego"
+              },
+              {
+                "const": "ali",
+                "title": "ali"
+              },
+              {
+                "const": "slay",
+                "title": "slay"
+              },
+              {
+                "const": "kitty",
+                "title": "kitty"
+              },
+              {
+                "const": "hustle",
+                "title": "hustle"
+              },
+              {
+                "const": "karl",
+                "title": "karl"
+              },
+              {
+                "const": "sprout",
+                "title": "sprout"
+              },
+              {
+                "const": "flex",
+                "title": "flex"
+              },
+              {
+                "const": "mint",
+                "title": "mint"
+              },
+              {
+                "const": "rizz",
+                "title": "rizz"
+              },
+              {
+                "const": "vegas",
+                "title": "vegas"
+              },
+              {
+                "const": "glass",
+                "title": "glass · Dynamic (2×)"
+              },
+              {
+                "const": "whisper",
+                "title": "whisper · Dynamic (2×)"
+              },
+              {
+                "const": "glide2",
+                "title": "glide2 · Dynamic (2×)"
+              },
+              {
+                "const": "fusion",
+                "title": "fusion · Dynamic (2×)"
+              },
+              {
+                "const": "glide",
+                "title": "glide · Dynamic (2×)"
+              },
+              {
+                "const": "terminal",
+                "title": "terminal · Dynamic (2×)"
+              },
+              {
+                "const": "handwritten",
+                "title": "handwritten · Dynamic (2×)"
+              },
+              {
+                "const": "backdrop",
+                "title": "backdrop · Dynamic (2×)"
+              },
+              {
+                "const": "backdrop2",
+                "title": "backdrop2 · Dynamic (2×)"
+              }
+            ],
+            "x-ui-metadata": {
+              "order": 1
+            }
+          },
+          "language": {
+            "type": "string",
+            "title": "Source Language",
+            "description": "Language of the source audio (improves transcription). Auto-detected if omitted.",
+            "x-ui-metadata": {
+              "order": 2,
+              "advanced": true,
+              "placeholder": "e.g. English"
+            }
+          },
+          "translation_language": {
+            "type": "string",
+            "title": "Translation Language",
+            "description": "Translate the subtitles into this language (+$0.20 per input minute).",
+            "x-ui-metadata": {
+              "order": 3,
+              "advanced": true,
+              "placeholder": "e.g. Spanish"
+            }
+          },
+          "srt_content": {
+            "type": "string",
+            "title": "SRT Content",
+            "description": "Raw SRT text — skips transcription entirely.",
+            "x-ui-metadata": {
+              "order": 4,
+              "advanced": true,
+              "component": "textarea"
+            }
+          },
+          "srt_file_url": {
+            "type": "string",
+            "title": "SRT File URL",
+            "format": "uri",
+            "description": "URL of an .srt file — skips transcription entirely.",
+            "x-ui-metadata": {
+              "order": 5,
+              "advanced": true
+            },
+            "x-file-metadata": {
+              "allowed-types": [
+                "text/*"
+              ]
+            }
+          },
+          "customization": {
+            "type": "string",
+            "title": "Customization (JSON)",
+            "description": "Optional JSON: {\"position\": \"top|center|bottom\", \"shadow\": \"none|min|mid|max\", \"text_customizations\": {\"baseline\": {\"font\", \"weight\", \"color\"}, \"highlighted\": {...}}}.",
+            "x-ui-metadata": {
+              "order": 6,
+              "advanced": true,
+              "component": "textarea"
+            }
+          }
+        },
+        "required": [
+          "video_url",
+          "preset"
+        ],
+        "examples": [
+          {
+            "video_url": "https://segmind-resources.s3.amazonaws.com/input/veed-subtitles-test-input-20260706185620.mp4",
+            "preset": "simple"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "gemini-omni-flash",
+      "title": "Gemini Omni Flash",
+      "type": "textToVideo",
+      "average_cost": 0.87209528125,
+      "is_depreciated": false,
+      "coming_soon": false,
+      "parameters_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "title": "Prompt",
+            "description": "Text describing scene, motion, style, and audio. Add camera and lighting cues for cinematic shots.",
+            "default": "Cinematic slow-motion shot of powerful ocean waves crashing against dramatic coastal cliffs at golden hour, sea spray catching warm sunlight, seabirds gliding in the distance, smooth aerial drone camera movement, photorealistic, highly detailed, 4k.",
+            "x-ui-metadata": {
+              "order": 0,
+              "advanced": false,
+              "hidden": false
+            }
+          },
+          "image_urls": {
+            "type": "array",
+            "title": "Reference Images",
+            "description": "Optional reference image URLs (image-to-video / multi-image reference). Up to 14 images.",
+            "x-ui-metadata": {
+              "order": 1,
+              "advanced": false,
+              "hidden": false
+            },
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "x-file-metadata": {
+                "allowed-types": [
+                  "image/*"
+                ]
+              }
+            },
+            "maxItems": 14
+          },
+          "duration": {
+            "type": "integer",
+            "title": "Duration (seconds)",
+            "description": "Clip length in seconds: 3, 5, or 10. Use 10 for fuller scenes.",
+            "oneOf": [
+              {
+                "const": 3,
+                "title": "3"
+              },
+              {
+                "const": 5,
+                "title": "5"
+              },
+              {
+                "const": 10,
+                "title": "10"
+              }
+            ],
+            "default": 5,
+            "x-ui-metadata": {
+              "order": 2,
+              "advanced": false,
+              "hidden": false
+            }
+          },
+          "aspect_ratio": {
+            "type": "string",
+            "title": "Aspect Ratio",
+            "description": "Output orientation, 16:9 or 9:16. Pick 9:16 for Shorts, 16:9 for widescreen.",
+            "oneOf": [
+              {
+                "const": "16:9",
+                "title": "16:9"
+              },
+              {
+                "const": "9:16",
+                "title": "9:16"
+              }
+            ],
+            "default": "16:9",
+            "x-ui-metadata": {
+              "order": 3,
+              "advanced": false,
+              "hidden": false
+            }
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed",
+            "description": "Integer from -1 to 999999999 for reproducibility. Use -1 random, fix to repeat.",
+            "minimum": -1,
+            "maximum": 999999999,
+            "default": -1,
+            "x-ui-metadata": {
+              "order": 4,
+              "advanced": true,
+              "hidden": false
+            }
+          },
+          "video": {
+            "type": "string",
+            "format": "uri",
+            "x-file-metadata": {
+              "allowed-types": [
+                "video/*"
+              ]
+            },
+            "title": "Reference Video (beta)",
+            "description": "Optional reference video URL to restyle or edit. Beta; may be intermittent.",
+            "x-ui-metadata": {
+              "order": 5,
+              "advanced": true,
+              "hidden": false
+            }
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "examples": [
+          {
+            "prompt": "Cinematic slow-motion shot of powerful ocean waves crashing against dramatic coastal cliffs at golden hour, sea spray catching warm sunlight, seabirds gliding in the distance, smooth aerial drone camera movement, photorealistic, highly detailed, 4k.",
+            "duration": 5,
+            "aspect_ratio": "16:9",
+            "seed": -1
+          }
+        ]
+      }
+    },
+    {
+      "slug": "topaz-video-upscale",
+      "title": "Topaz Labs Video Upscale",
+      "type": "videoToVideo",
+      "average_cost": 0.4359466666666666,
+      "is_depreciated": false,
+      "coming_soon": false,
+      "parameters_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "video": {
+            "type": "string",
+            "format": "uri",
+            "x-file-metadata": {
+              "allowed-types": [
+                "video/*"
+              ]
+            },
+            "title": "Video Input",
+            "description": "Video to upscale in mp4 Up to 45 seconds.",
+            "x-ui-metadata": {
+              "order": 0,
+              "advanced": false,
+              "hidden": false
+            }
+          },
+          "target_resolution": {
+            "type": "string",
+            "title": "Target resolution",
+            "description": "Target Resolution",
+            "oneOf": [
+              {
+                "const": "720p",
+                "title": "720p"
+              },
+              {
+                "const": "1080p",
+                "title": "1080p"
+              },
+              {
+                "const": "4k",
+                "title": "4k"
+              }
+            ],
+            "default": "1080p",
+            "x-ui-metadata": {
+              "order": 1,
+              "advanced": false,
+              "hidden": false
+            }
+          },
+          "target_fps": {
+            "type": "integer",
+            "title": "Target_Fps",
+            "description": "Target FPS (15fps to 120fps)",
+            "minimum": 16,
+            "maximum": 60,
+            "default": 60,
+            "x-ui-metadata": {
+              "order": 2,
+              "advanced": true,
+              "hidden": false
+            }
+          }
+        },
+        "required": [
+          "video"
+        ],
+        "examples": [
+          {
+            "video": "https://segmind-resources.s3.amazonaws.com/input/008b1c8e-5d9c-4ad3-96e3-0943f120058f-273289_medium.mp4",
+            "target_resolution": "1080p",
+            "target_fps": 60
+          }
+        ]
+      }
+    },
+    {
+      "slug": "future-model",
+      "title": "Future",
+      "type": "textToVideo",
+      "average_cost": 0,
+      "is_depreciated": false,
+      "coming_soon": true,
+      "parameters_schema": {}
+    }
+  ]
+}

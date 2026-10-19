@@ -1,0 +1,254 @@
+{
+  "openapi": "3.0.4",
+  "paths": {
+    "/fal-ai/hunyuan3d-v3/image-to-3d": {
+      "post": {
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Hunyuan3dV3ImageTo3dInput"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Hunyuan3dV3ImageTo3dInput": {
+        "x-fal-order-properties": [
+          "input_image_url",
+          "enable_safety_checker",
+          "back_image_url",
+          "left_image_url",
+          "right_image_url",
+          "enable_pbr",
+          "face_count",
+          "generate_type",
+          "polygon_type"
+        ],
+        "required": [
+          "input_image_url"
+        ],
+        "properties": {
+          "back_image_url": {
+            "description": "Optional back view image URL for better 3D reconstruction.",
+            "max_file_size": 8388608,
+            "anyOf": [
+              {
+                "_fal_ui_field": "image",
+                "type": "string",
+                "ui": {
+                  "field": "image"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Back Image Url"
+          },
+          "face_count": {
+            "maximum": 1500000,
+            "description": "Target face count. Range: 40000-1500000",
+            "minimum": 40000,
+            "default": 500000,
+            "type": "integer",
+            "title": "Face Count"
+          },
+          "polygon_type": {
+            "enum": [
+              "triangle",
+              "quadrilateral"
+            ],
+            "description": "Polygon type. Only takes effect when GenerateType is LowPoly.",
+            "default": "triangle",
+            "type": "string",
+            "title": "Polygon Type"
+          },
+          "left_image_url": {
+            "description": "Optional left view image URL for better 3D reconstruction.",
+            "max_file_size": 8388608,
+            "anyOf": [
+              {
+                "_fal_ui_field": "image",
+                "type": "string",
+                "ui": {
+                  "field": "image"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Left Image Url"
+          },
+          "generate_type": {
+            "enum": [
+              "Normal",
+              "LowPoly",
+              "Geometry"
+            ],
+            "description": "Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture.",
+            "default": "Normal",
+            "type": "string",
+            "title": "Generate Type"
+          },
+          "enable_pbr": {
+            "description": "Whether to enable PBR material generation. Does not take effect when generate_type is Geometry.",
+            "default": false,
+            "type": "boolean",
+            "title": "Enable Pbr"
+          },
+          "input_image_url": {
+            "title": "Input Image Url",
+            "description": "URL of image to use while generating the 3D model.",
+            "_fal_ui_field": "image",
+            "max_file_size": 8388608,
+            "type": "string"
+          },
+          "enable_safety_checker": {
+            "description": "Authorized callers may set false to request relaxed screening.",
+            "default": true,
+            "type": "boolean",
+            "title": "Enable Safety Checker"
+          },
+          "right_image_url": {
+            "description": "Optional right view image URL for better 3D reconstruction.",
+            "max_file_size": 8388608,
+            "anyOf": [
+              {
+                "_fal_ui_field": "image",
+                "type": "string",
+                "ui": {
+                  "field": "image"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Right Image Url"
+          }
+        },
+        "type": "object",
+        "title": "ImageTo3DInput"
+      },
+      "File": {
+        "x-fal-order-properties": [
+          "url",
+          "content_type",
+          "file_name",
+          "file_size"
+        ],
+        "required": [
+          "url"
+        ],
+        "properties": {
+          "content_type": {
+            "description": "The mime type of the file.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content Type"
+          },
+          "file_size": {
+            "description": "The size of the file in bytes.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File Size"
+          },
+          "file_name": {
+            "description": "The name of the file. It will be auto-generated if not provided.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File Name"
+          },
+          "url": {
+            "description": "The URL where the file can be downloaded from.",
+            "type": "string",
+            "title": "Url"
+          }
+        },
+        "type": "object",
+        "title": "File"
+      },
+      "ModelUrls": {
+        "x-fal-order-properties": [
+          "glb",
+          "fbx",
+          "obj",
+          "usdz"
+        ],
+        "properties": {
+          "obj": {
+            "description": "OBJ format 3D model",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/File"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fbx": {
+            "description": "FBX format 3D model",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/File"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "usdz": {
+            "description": "USDZ format 3D model",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/File"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "glb": {
+            "description": "GLB format 3D model",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/File"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "title": "ModelUrls"
+      }
+    }
+  }
+}

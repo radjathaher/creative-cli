@@ -1,0 +1,893 @@
+[
+ {
+  "id": "openai:gpt-image-2",
+  "provider": "openai",
+  "model_id": "gpt-image-2",
+  "transport": "openai",
+  "op": "image.t2i",
+  "family": "gpt-image-2",
+  "title": "GPT Image 2",
+  "price": {
+   "unit": "image",
+   "source": "manual",
+   "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+   "as_of": "2026-10-19",
+   "value_usd": 0.053,
+   "tiers": [
+    {
+     "match": {
+      "quality": "low"
+     },
+     "value_usd": 0.006
+    },
+    {
+     "match": {
+      "quality": "medium"
+     },
+     "value_usd": 0.053
+    },
+    {
+     "match": {
+      "quality": "high"
+     },
+     "value_usd": 0.211
+    }
+   ],
+   "note": "1024x1024; default medium; plus input tokens ($8/1M)"
+  },
+  "verified": false,
+  "source_url": "https://developers.openai.com/api/docs/guides/image-generation"
+ },
+ {
+  "id": "openai:gpt-image-2#image.edit",
+  "provider": "openai",
+  "model_id": "gpt-image-2",
+  "transport": "openai",
+  "op": "image.edit",
+  "family": "gpt-image-2",
+  "title": "GPT Image 2 edit",
+  "price": {
+   "unit": "image",
+   "source": "manual",
+   "source_url": "https://developers.openai.com/api/docs/guides/image-generation",
+   "as_of": "2026-10-19",
+   "value_usd": 0.053,
+   "tiers": [
+    {
+     "match": {
+      "quality": "low"
+     },
+     "value_usd": 0.006
+    },
+    {
+     "match": {
+      "quality": "medium"
+     },
+     "value_usd": 0.053
+    },
+    {
+     "match": {
+      "quality": "high"
+     },
+     "value_usd": 0.211
+    }
+   ],
+   "note": "1024x1024; default medium; plus image input tokens ($8/1M)"
+  },
+  "verified": false,
+  "source_url": "https://developers.openai.com/api/docs/guides/image-generation"
+ },
+ {
+  "id": "openai:gpt-image-2.5-flare",
+  "provider": "openai",
+  "model_id": "gpt-image-2.5-flare",
+  "transport": "openai",
+  "op": "image.t2i",
+  "family": "gpt-image-2.5",
+  "variant": "flare",
+  "title": "GPT Image 2.5 Flare",
+  "price": {
+   "unit": "image",
+   "source": "manual",
+   "source_url": "https://developers.openai.com/api/docs/pricing",
+   "as_of": "2026-10-19",
+   "note": "Measured 2026-10-19 at 1024x1024 from reported tokens at $8/1M input and $30/1M output: medium 439 output tokens, high 1756. Low is not measured. Larger sizes cost more; the job record stores the exact cost from usage.",
+   "tiers": [
+    {
+     "match": {
+      "quality": "medium"
+     },
+     "value_usd": 0.0137
+    },
+    {
+     "match": {
+      "quality": "high"
+     },
+     "value_usd": 0.0532
+    }
+   ]
+  },
+  "verified": false,
+  "source_url": "https://developers.openai.com/api/docs/pricing"
+ },
+ {
+  "id": "openai:gpt-image-2.5-flare#image.edit",
+  "provider": "openai",
+  "model_id": "gpt-image-2.5-flare",
+  "transport": "openai",
+  "op": "image.edit",
+  "family": "gpt-image-2.5",
+  "variant": "flare",
+  "title": "GPT Image 2.5 Flare edit",
+  "price": {
+   "unit": "image",
+   "source": "manual",
+   "source_url": "https://developers.openai.com/api/docs/pricing",
+   "as_of": "2026-10-19",
+   "note": "Measured 2026-10-19 at 1024x1024 from reported tokens at $8/1M input and $30/1M output: medium 439 output tokens, high 1756. Low is not measured. Larger sizes cost more; the job record stores the exact cost from usage.",
+   "tiers": [
+    {
+     "match": {
+      "quality": "medium"
+     },
+     "value_usd": 0.0137
+    },
+    {
+     "match": {
+      "quality": "high"
+     },
+     "value_usd": 0.0532
+    }
+   ]
+  },
+  "verified": false,
+  "source_url": "https://developers.openai.com/api/docs/pricing"
+ },
+ {
+  "id": "openai:gpt-image-2.5-sunburst",
+  "provider": "openai",
+  "model_id": "gpt-image-2.5-sunburst",
+  "transport": "openai",
+  "op": "image.t2i",
+  "family": "gpt-image-2.5",
+  "variant": "sunburst",
+  "title": "GPT Image 2.5 Sunburst",
+  "price": {
+   "unit": "image",
+   "source": "manual",
+   "source_url": "https://developers.openai.com/api/docs/pricing",
+   "as_of": "2026-10-19",
+   "note": "Measured 2026-10-19 at 1024x1024 from reported tokens at $8/1M input and $30/1M output: medium 439 output tokens, high 1756. Low is not measured. Larger sizes cost more; the job record stores the exact cost from usage.",
+   "tiers": [
+    {
+     "match": {
+      "quality": "medium"
+     },
+     "value_usd": 0.0137
+    },
+    {
+     "match": {
+      "quality": "high"
+     },
+     "value_usd": 0.0532
+    }
+   ]
+  },
+  "verified": false,
+  "source_url": "https://developers.openai.com/api/docs/pricing"
+ },
+ {
+  "id": "openai:gpt-image-2.5-sunburst#image.edit",
+  "provider": "openai",
+  "model_id": "gpt-image-2.5-sunburst",
+  "transport": "openai",
+  "op": "image.edit",
+  "family": "gpt-image-2.5",
+  "variant": "sunburst",
+  "title": "GPT Image 2.5 Sunburst edit",
+  "price": {
+   "unit": "image",
+   "source": "manual",
+   "source_url": "https://developers.openai.com/api/docs/pricing",
+   "as_of": "2026-10-19",
+   "note": "Measured 2026-10-19 at 1024x1024 from reported tokens at $8/1M input and $30/1M output: medium 439 output tokens, high 1756. Low is not measured. Larger sizes cost more; the job record stores the exact cost from usage.",
+   "tiers": [
+    {
+     "match": {
+      "quality": "medium"
+     },
+     "value_usd": 0.0137
+    },
+    {
+     "match": {
+      "quality": "high"
+     },
+     "value_usd": 0.0532
+    }
+   ]
+  },
+  "verified": false,
+  "source_url": "https://developers.openai.com/api/docs/pricing"
+ },
+ {
+  "id": "openai:tts-1",
+  "provider": "openai",
+  "model_id": "tts-1",
+  "transport": "openai",
+  "op": "voice.tts",
+  "family": "openai-tts-1",
+  "price": {
+   "unit": "1k_chars",
+   "source": "manual",
+   "source_url": "https://developers.openai.com/api/docs/pricing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.015,
+   "note": "$15/1M chars"
+  },
+  "verified": false,
+  "source_url": "https://developers.openai.com/api/docs/pricing"
+ },
+ {
+  "id": "openai:tts-1-hd",
+  "provider": "openai",
+  "model_id": "tts-1-hd",
+  "transport": "openai",
+  "op": "voice.tts",
+  "family": "openai-tts-1-hd",
+  "price": {
+   "unit": "1k_chars",
+   "source": "manual",
+   "source_url": "https://developers.openai.com/api/docs/pricing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.03,
+   "note": "$30/1M chars"
+  },
+  "verified": false,
+  "source_url": "https://developers.openai.com/api/docs/pricing"
+ },
+ {
+  "id": "openai:gpt-4o-mini-tts",
+  "provider": "openai",
+  "model_id": "gpt-4o-mini-tts",
+  "transport": "openai",
+  "op": "voice.tts",
+  "family": "gpt-4o-mini-tts",
+  "price": {
+   "unit": "minute",
+   "source": "manual",
+   "source_url": "https://developers.openai.com/api/docs/pricing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.015,
+   "note": "OpenAI's estimate per minute of audio ($12/1M audio tokens); unverified"
+  },
+  "verified": false,
+  "source_url": "https://developers.openai.com/api/docs/pricing"
+ },
+ {
+  "id": "openai:gpt-transcribe",
+  "provider": "openai",
+  "model_id": "gpt-transcribe",
+  "transport": "openai",
+  "op": "stt",
+  "family": "gpt-transcribe",
+  "price": {
+   "unit": "minute",
+   "source": "manual",
+   "source_url": "https://developers.openai.com/api/docs/pricing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.0045,
+   "note": "estimated cost per minute from pricing page"
+  },
+  "verified": false,
+  "source_url": "https://developers.openai.com/api/docs/pricing"
+ },
+ {
+  "id": "openai:gpt-4o-transcribe",
+  "provider": "openai",
+  "model_id": "gpt-4o-transcribe",
+  "transport": "openai",
+  "op": "stt",
+  "family": "gpt-4o-transcribe",
+  "price": {
+   "unit": "minute",
+   "source": "manual",
+   "source_url": "https://developers.openai.com/api/docs/pricing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.006,
+   "note": "estimated cost per minute; word timestamps supported"
+  },
+  "verified": false,
+  "source_url": "https://developers.openai.com/api/docs/pricing"
+ },
+ {
+  "id": "openai:gpt-4o-mini-transcribe",
+  "provider": "openai",
+  "model_id": "gpt-4o-mini-transcribe",
+  "transport": "openai",
+  "op": "stt",
+  "family": "gpt-4o-mini-transcribe",
+  "price": {
+   "unit": "minute",
+   "source": "manual",
+   "source_url": "https://developers.openai.com/api/docs/pricing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.003,
+   "note": "estimated cost per minute"
+  },
+  "verified": false,
+  "source_url": "https://developers.openai.com/api/docs/pricing"
+ },
+ {
+  "id": "openai:whisper-1",
+  "provider": "openai",
+  "model_id": "whisper-1",
+  "transport": "openai",
+  "op": "stt",
+  "family": "whisper-1",
+  "price": {
+   "unit": "minute",
+   "source": "manual",
+   "source_url": "https://developers.openai.com/api/docs/pricing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.006,
+   "note": "legacy default of v0.2.4"
+  },
+  "verified": false,
+  "source_url": "https://developers.openai.com/api/docs/pricing"
+ },
+ {
+  "id": "codex-lb:gpt-image-2",
+  "provider": "codex-lb",
+  "model_id": "gpt-image-2",
+  "transport": "codex-lb",
+  "op": "image.t2i",
+  "family": "gpt-image-2",
+  "title": "GPT Image 2 (Codex-LB)",
+  "price": {
+   "unit": "image",
+   "source": "manual",
+   "source_url": "docs/router-spec.md",
+   "as_of": "2026-10-19",
+   "value_usd": 0.0,
+   "note": "ChatGPT pool; no marginal cost; rate-limited"
+  },
+  "verified": false,
+  "source_url": "docs/router-spec.md"
+ },
+ {
+  "id": "codex-lb:gpt-image-2#image.edit",
+  "provider": "codex-lb",
+  "model_id": "gpt-image-2",
+  "transport": "codex-lb",
+  "op": "image.edit",
+  "family": "gpt-image-2",
+  "title": "GPT Image 2 edit (Codex-LB)",
+  "price": {
+   "unit": "image",
+   "source": "manual",
+   "source_url": "docs/router-spec.md",
+   "as_of": "2026-10-19",
+   "value_usd": 0.0,
+   "note": "ChatGPT pool; no marginal cost; rate-limited"
+  },
+  "verified": false,
+  "source_url": "docs/router-spec.md"
+ },
+ {
+  "id": "elevenlabs:eleven_v4",
+  "provider": "elevenlabs",
+  "model_id": "eleven_v4",
+  "transport": "elevenlabs",
+  "op": "voice.tts",
+  "family": "eleven-v4",
+  "price": {
+   "unit": "1k_chars",
+   "source": "manual",
+   "source_url": "https://elevenlabs.io/pricing/api",
+   "as_of": "2026-10-19",
+   "value_usd": 0.08,
+   "note": "PAYG; about 1 min of audio per 1k chars"
+  },
+  "verified": false,
+  "source_url": "https://elevenlabs.io/pricing/api"
+ },
+ {
+  "id": "elevenlabs:eleven_v4_turbo",
+  "provider": "elevenlabs",
+  "model_id": "eleven_v4_turbo",
+  "transport": "elevenlabs",
+  "op": "voice.tts",
+  "family": "eleven-v4-turbo",
+  "price": {
+   "unit": "1k_chars",
+   "source": "manual",
+   "source_url": "https://elevenlabs.io/pricing/api",
+   "as_of": "2026-10-19",
+   "value_usd": 0.04,
+   "note": "PAYG; about 1 min of audio per 1k chars"
+  },
+  "verified": false,
+  "source_url": "https://elevenlabs.io/pricing/api"
+ },
+ {
+  "id": "elevenlabs:eleven_v3",
+  "provider": "elevenlabs",
+  "model_id": "eleven_v3",
+  "transport": "elevenlabs",
+  "op": "voice.tts",
+  "family": "eleven-v3",
+  "price": {
+   "unit": "1k_chars",
+   "source": "manual",
+   "source_url": "https://elevenlabs.io/pricing/api",
+   "as_of": "2026-10-19",
+   "value_usd": 0.08,
+   "note": "PAYG; about 1 min of audio per 1k chars"
+  },
+  "verified": false,
+  "source_url": "https://elevenlabs.io/pricing/api"
+ },
+ {
+  "id": "elevenlabs:eleven_multilingual_v2",
+  "provider": "elevenlabs",
+  "model_id": "eleven_multilingual_v2",
+  "transport": "elevenlabs",
+  "op": "voice.tts",
+  "family": "eleven-multilingual-v2",
+  "price": {
+   "unit": "1k_chars",
+   "source": "manual",
+   "source_url": "https://elevenlabs.io/pricing/api",
+   "as_of": "2026-10-19",
+   "value_usd": 0.08,
+   "note": "PAYG; about 1 min of audio per 1k chars"
+  },
+  "verified": false,
+  "source_url": "https://elevenlabs.io/pricing/api"
+ },
+ {
+  "id": "elevenlabs:eleven_flash_v2_5",
+  "provider": "elevenlabs",
+  "model_id": "eleven_flash_v2_5",
+  "transport": "elevenlabs",
+  "op": "voice.tts",
+  "family": "eleven-flash-v2.5",
+  "price": {
+   "unit": "1k_chars",
+   "source": "manual",
+   "source_url": "https://elevenlabs.io/pricing/api",
+   "as_of": "2026-10-19",
+   "value_usd": 0.04,
+   "note": "PAYG; about 1 min of audio per 1k chars"
+  },
+  "verified": false,
+  "source_url": "https://elevenlabs.io/pricing/api"
+ },
+ {
+  "id": "elevenlabs:scribe_v2",
+  "provider": "elevenlabs",
+  "model_id": "scribe_v2",
+  "transport": "elevenlabs",
+  "op": "stt",
+  "family": "scribe-v2",
+  "price": {
+   "unit": "minute",
+   "source": "manual",
+   "source_url": "https://elevenlabs.io/pricing/api",
+   "as_of": "2026-10-19",
+   "value_usd": 0.00367,
+   "note": "$0.22/hour; +$0.05/h keyterms, +$0.07/h editing; word timestamps"
+  },
+  "verified": false,
+  "source_url": "https://elevenlabs.io/pricing/api"
+ },
+ {
+  "id": "elevenlabs:sound_effects",
+  "provider": "elevenlabs",
+  "model_id": "sound_effects",
+  "transport": "elevenlabs",
+  "op": "sfx.generate",
+  "family": "eleven-sfx",
+  "price": {
+   "unit": "minute",
+   "source": "manual",
+   "source_url": "https://elevenlabs.io/pricing/api",
+   "as_of": "2026-10-19",
+   "value_usd": 0.12,
+   "note": "billed per generation per minute"
+  },
+  "verified": false,
+  "source_url": "https://elevenlabs.io/pricing/api"
+ },
+ {
+  "id": "elevenlabs:music_v1",
+  "provider": "elevenlabs",
+  "model_id": "music_v1",
+  "transport": "elevenlabs",
+  "op": "music.generate",
+  "family": "eleven-music",
+  "price": {
+   "unit": "minute",
+   "source": "manual",
+   "source_url": "https://elevenlabs.io/pricing/api",
+   "as_of": "2026-10-19",
+   "value_usd": 0.15,
+   "note": "max 5 min; commercial licence needs Starter plan or higher"
+  },
+  "verified": false,
+  "source_url": "https://elevenlabs.io/pricing/api"
+ },
+ {
+  "id": "elevenlabs:instant_voice_clone",
+  "provider": "elevenlabs",
+  "model_id": "instant_voice_clone",
+  "transport": "elevenlabs",
+  "op": "voice.clone",
+  "family": "eleven-voice-clone",
+  "price": {
+   "unit": "unknown",
+   "source": "manual",
+   "source_url": "https://elevenlabs.io/pricing/api",
+   "as_of": "2026-10-19",
+   "note": "no per-call price published; plan-gated (historically Starter+)"
+  },
+  "verified": false,
+  "source_url": "https://elevenlabs.io/pricing/api"
+ },
+ {
+  "id": "elevenlabs:voice_design",
+  "provider": "elevenlabs",
+  "model_id": "voice_design",
+  "transport": "elevenlabs",
+  "op": "voice.design",
+  "family": "eleven-voice-design",
+  "price": {
+   "unit": "unknown",
+   "source": "manual",
+   "source_url": "https://elevenlabs.io/pricing/api",
+   "as_of": "2026-10-19",
+   "note": "no separate price published; previews likely billed as TTS characters (unverified)"
+  },
+  "verified": false,
+  "source_url": "https://elevenlabs.io/pricing/api"
+ },
+ {
+  "id": "elevenlabs:voice_changer",
+  "provider": "elevenlabs",
+  "model_id": "voice_changer",
+  "transport": "elevenlabs",
+  "op": "voice.change",
+  "family": "eleven-voice-changer",
+  "price": {
+   "unit": "minute",
+   "source": "manual",
+   "source_url": "https://elevenlabs.io/pricing/api",
+   "as_of": "2026-10-19",
+   "value_usd": 0.12
+  },
+  "verified": false,
+  "source_url": "https://elevenlabs.io/pricing/api"
+ },
+ {
+  "id": "elevenlabs:dubbing_v1",
+  "provider": "elevenlabs",
+  "model_id": "dubbing_v1",
+  "transport": "elevenlabs",
+  "op": "voice.dub",
+  "family": "eleven-dubbing",
+  "price": {
+   "unit": "minute",
+   "source": "manual",
+   "source_url": "https://elevenlabs.io/pricing/api",
+   "as_of": "2026-10-19",
+   "value_usd": 0.33,
+   "note": "with watermark; $0.50/min without"
+  },
+  "verified": false,
+  "source_url": "https://elevenlabs.io/pricing/api"
+ },
+ {
+  "id": "elevenlabs:voice_isolator",
+  "provider": "elevenlabs",
+  "model_id": "voice_isolator",
+  "transport": "elevenlabs",
+  "op": "voice.isolate",
+  "family": "eleven-isolator",
+  "price": {
+   "unit": "minute",
+   "source": "manual",
+   "source_url": "https://elevenlabs.io/pricing/api",
+   "as_of": "2026-10-19",
+   "value_usd": 0.12
+  },
+  "verified": false,
+  "source_url": "https://elevenlabs.io/pricing/api"
+ },
+ {
+  "id": "google:gemini-omni-1.1-flash",
+  "provider": "google",
+  "model_id": "gemini-omni-1.1-flash",
+  "transport": "google",
+  "op": "video.t2v",
+  "family": "gemini-omni-flash-1.1",
+  "title": "Gemini Omni 1.1 Flash",
+  "price": {
+   "unit": "second",
+   "source": "manual",
+   "source_url": "https://ai.google.dev/gemini-api/docs/pricing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.1,
+   "tiers": [
+    {
+     "match": {
+      "resolution": "720p"
+     },
+     "value_usd": 0.1
+    }
+   ],
+   "note": "720p; $17.50/1M video output tokens at 5,792 tokens/s; input $1.50/1M; route only until GEMINI_API_KEY exists"
+  },
+  "verified": false,
+  "source_url": "https://ai.google.dev/gemini-api/docs/pricing"
+ },
+ {
+  "id": "google:gemini-omni-1.1-flash#video.i2v",
+  "provider": "google",
+  "model_id": "gemini-omni-1.1-flash",
+  "transport": "google",
+  "op": "video.i2v",
+  "family": "gemini-omni-flash-1.1",
+  "title": "Gemini Omni 1.1 Flash",
+  "price": {
+   "unit": "second",
+   "source": "manual",
+   "source_url": "https://ai.google.dev/gemini-api/docs/pricing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.1,
+   "tiers": [
+    {
+     "match": {
+      "resolution": "720p"
+     },
+     "value_usd": 0.1
+    }
+   ],
+   "note": "720p; $17.50/1M video output tokens at 5,792 tokens/s; input $1.50/1M; route only until GEMINI_API_KEY exists"
+  },
+  "verified": false,
+  "source_url": "https://ai.google.dev/gemini-api/docs/pricing"
+ },
+ {
+  "id": "zapcap:zapcap-templates",
+  "provider": "zapcap",
+  "model_id": "zapcap-templates",
+  "transport": "zapcap",
+  "op": "caption.burn",
+  "family": "zapcap",
+  "price": {
+   "unit": "unknown",
+   "source": "manual",
+   "source_url": "https://zapcap.ai/pricing",
+   "as_of": "2026-10-19",
+   "note": "styled caption templates kept from v0.2.4; price not published per minute"
+  },
+  "verified": false,
+  "source_url": "https://zapcap.ai/pricing"
+ },
+ {
+  "id": "meshy:meshy-7.1",
+  "provider": "meshy",
+  "model_id": "meshy-7.1",
+  "transport": "meshy",
+  "op": "3d.t2mesh",
+  "family": "meshy-7.1",
+  "price": {
+   "unit": "request",
+   "source": "manual",
+   "source_url": "https://docs.meshy.ai/en/api/pricing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.4,
+   "note": "20 credits; credit = $0.02 derived from Pro $20/1000 credits; API needs Pro plan ($20/mo)"
+  },
+  "verified": false,
+  "source_url": "https://docs.meshy.ai/en/api/pricing"
+ },
+ {
+  "id": "meshy:meshy-7.1-i2mesh",
+  "provider": "meshy",
+  "model_id": "meshy-7.1-i2mesh",
+  "transport": "meshy",
+  "op": "3d.i2mesh",
+  "family": "meshy-7.1",
+  "price": {
+   "unit": "request",
+   "source": "manual",
+   "source_url": "https://docs.meshy.ai/en/api/pricing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.6,
+   "note": "30 credits; credit = $0.02 derived from Pro $20/1000 credits; API needs Pro plan ($20/mo)"
+  },
+  "verified": false,
+  "source_url": "https://docs.meshy.ai/en/api/pricing"
+ },
+ {
+  "id": "meshy:meshy-texture",
+  "provider": "meshy",
+  "model_id": "meshy-texture",
+  "transport": "meshy",
+  "op": "3d.texture",
+  "family": "meshy",
+  "price": {
+   "unit": "request",
+   "source": "manual",
+   "source_url": "https://docs.meshy.ai/en/api/pricing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.2,
+   "note": "10 credits; credit = $0.02 derived from Pro $20/1000 credits; API needs Pro plan ($20/mo)"
+  },
+  "verified": false,
+  "source_url": "https://docs.meshy.ai/en/api/pricing"
+ },
+ {
+  "id": "meshy:meshy-rig",
+  "provider": "meshy",
+  "model_id": "meshy-rig",
+  "transport": "meshy",
+  "op": "3d.rig",
+  "family": "meshy",
+  "price": {
+   "unit": "request",
+   "source": "manual",
+   "source_url": "https://docs.meshy.ai/en/api/pricing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.1,
+   "note": "5 credits; credit = $0.02 derived from Pro $20/1000 credits; API needs Pro plan ($20/mo)"
+  },
+  "verified": false,
+  "source_url": "https://docs.meshy.ai/en/api/pricing"
+ },
+ {
+  "id": "meshy:meshy-animate",
+  "provider": "meshy",
+  "model_id": "meshy-animate",
+  "transport": "meshy",
+  "op": "3d.animate",
+  "family": "meshy",
+  "price": {
+   "unit": "request",
+   "source": "manual",
+   "source_url": "https://docs.meshy.ai/en/api/pricing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.06,
+   "note": "3 credits; credit = $0.02 derived from Pro $20/1000 credits; API needs Pro plan ($20/mo)"
+  },
+  "verified": false,
+  "source_url": "https://docs.meshy.ai/en/api/pricing"
+ },
+ {
+  "id": "tripo:tripo-p1",
+  "provider": "tripo",
+  "model_id": "tripo-p1",
+  "transport": "tripo",
+  "op": "3d.t2mesh",
+  "family": "tripo-p1",
+  "price": {
+   "unit": "request",
+   "source": "manual",
+   "source_url": "https://platform.tripo3d.ai/docs/billing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.4,
+   "note": "40 credits; 1 credit = $0.01, PAYG"
+  },
+  "verified": false,
+  "source_url": "https://platform.tripo3d.ai/docs/billing"
+ },
+ {
+  "id": "tripo:tripo-p1-i2mesh",
+  "provider": "tripo",
+  "model_id": "tripo-p1-i2mesh",
+  "transport": "tripo",
+  "op": "3d.i2mesh",
+  "family": "tripo-p1",
+  "price": {
+   "unit": "request",
+   "source": "manual",
+   "source_url": "https://platform.tripo3d.ai/docs/billing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.5,
+   "note": "50 credits; 1 credit = $0.01, PAYG"
+  },
+  "verified": false,
+  "source_url": "https://platform.tripo3d.ai/docs/billing"
+ },
+ {
+  "id": "tripo:tripo-v3.1",
+  "provider": "tripo",
+  "model_id": "tripo-v3.1",
+  "transport": "tripo",
+  "op": "3d.t2mesh",
+  "family": "tripo-v3.1",
+  "price": {
+   "unit": "request",
+   "source": "manual",
+   "source_url": "https://platform.tripo3d.ai/docs/billing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.2,
+   "note": "20 credits; 1 credit = $0.01, PAYG"
+  },
+  "verified": false,
+  "source_url": "https://platform.tripo3d.ai/docs/billing"
+ },
+ {
+  "id": "tripo:tripo-v3.1-i2mesh",
+  "provider": "tripo",
+  "model_id": "tripo-v3.1-i2mesh",
+  "transport": "tripo",
+  "op": "3d.i2mesh",
+  "family": "tripo-v3.1",
+  "price": {
+   "unit": "request",
+   "source": "manual",
+   "source_url": "https://platform.tripo3d.ai/docs/billing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.3,
+   "note": "30 credits; 1 credit = $0.01, PAYG"
+  },
+  "verified": false,
+  "source_url": "https://platform.tripo3d.ai/docs/billing"
+ },
+ {
+  "id": "tripo:tripo-texture",
+  "provider": "tripo",
+  "model_id": "tripo-texture",
+  "transport": "tripo",
+  "op": "3d.texture",
+  "family": "tripo",
+  "price": {
+   "unit": "request",
+   "source": "manual",
+   "source_url": "https://platform.tripo3d.ai/docs/billing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.1,
+   "note": "10 credits; 1 credit = $0.01, PAYG"
+  },
+  "verified": false,
+  "source_url": "https://platform.tripo3d.ai/docs/billing"
+ },
+ {
+  "id": "tripo:tripo-rig",
+  "provider": "tripo",
+  "model_id": "tripo-rig",
+  "transport": "tripo",
+  "op": "3d.rig",
+  "family": "tripo",
+  "price": {
+   "unit": "request",
+   "source": "manual",
+   "source_url": "https://platform.tripo3d.ai/docs/billing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.25,
+   "note": "25 credits; 1 credit = $0.01, PAYG"
+  },
+  "verified": false,
+  "source_url": "https://platform.tripo3d.ai/docs/billing"
+ },
+ {
+  "id": "tripo:tripo-retarget",
+  "provider": "tripo",
+  "model_id": "tripo-retarget",
+  "transport": "tripo",
+  "op": "3d.animate",
+  "family": "tripo",
+  "price": {
+   "unit": "request",
+   "source": "manual",
+   "source_url": "https://platform.tripo3d.ai/docs/billing",
+   "as_of": "2026-10-19",
+   "value_usd": 0.1,
+   "note": "10 credits; 1 credit = $0.01, PAYG"
+  },
+  "verified": false,
+  "source_url": "https://platform.tripo3d.ai/docs/billing"
+ }
+]

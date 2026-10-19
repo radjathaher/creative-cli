@@ -1,0 +1,233 @@
+{
+  "openapi": "3.0.4",
+  "paths": {
+    "/openai/gpt-image-2": {
+      "post": {
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GptImage2Input"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GptImage2Input": {
+        "title": "TextToImageRequest",
+        "type": "object",
+        "required": [
+          "prompt"
+        ],
+        "x-fal-order-properties": [
+          "prompt",
+          "image_size",
+          "background",
+          "quality",
+          "num_images",
+          "output_format",
+          "sync_mode",
+          "enable_safety_checker"
+        ],
+        "properties": {
+          "sync_mode": {
+            "default": false,
+            "title": "Sync Mode",
+            "description": "If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
+            "type": "boolean"
+          },
+          "image_size": {
+            "default": "landscape_4_3",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ImageSize"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "square_hd",
+                  "square",
+                  "portrait_4_3",
+                  "portrait_16_9",
+                  "landscape_4_3",
+                  "landscape_16_9",
+                  "auto"
+                ]
+              }
+            ],
+            "title": "Image Size",
+            "description": "The size of the generated image. Supports preset names, explicit {width, height}, or 'auto' to let the model pick the best size. Concrete sizes must have both dimensions as multiples of 16, max edge 3840px, aspect ratio <= 3:1, total pixels between 655,360 and 8,294,400."
+          },
+          "output_format": {
+            "default": "png",
+            "title": "Output Format",
+            "description": "Output format for the images",
+            "type": "string",
+            "enum": [
+              "jpeg",
+              "png",
+              "webp"
+            ]
+          },
+          "prompt": {
+            "minLength": 2,
+            "title": "Prompt",
+            "description": "The prompt for image generation",
+            "type": "string",
+            "maxLength": 32000
+          },
+          "enable_safety_checker": {
+            "default": true,
+            "title": "Enable Safety Checker",
+            "description": "Authorized callers may set false to request relaxed screening.",
+            "type": "boolean"
+          },
+          "quality": {
+            "default": "high",
+            "title": "Quality",
+            "description": "Quality for the generated image. Use 'auto' to let the model pick the best quality for the prompt.",
+            "type": "string",
+            "enum": [
+              "auto",
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "num_images": {
+            "default": 1,
+            "title": "Number of Images",
+            "maximum": 4,
+            "type": "integer",
+            "minimum": 1,
+            "description": "Number of images to generate"
+          },
+          "background": {
+            "default": "auto",
+            "title": "Background",
+            "description": "Background for the generated image",
+            "type": "string",
+            "enum": [
+              "auto",
+              "transparent",
+              "opaque"
+            ]
+          }
+        }
+      },
+      "ImageSize": {
+        "title": "ImageSize",
+        "type": "object",
+        "x-fal-order-properties": [
+          "width",
+          "height"
+        ],
+        "properties": {
+          "width": {
+            "default": 512,
+            "title": "Width",
+            "maximum": 14142,
+            "description": "The width of the generated image.",
+            "type": "integer",
+            "exclusiveMinimum": 0
+          },
+          "height": {
+            "default": 512,
+            "title": "Height",
+            "maximum": 14142,
+            "description": "The height of the generated image.",
+            "type": "integer",
+            "exclusiveMinimum": 0
+          }
+        }
+      },
+      "ImageFile": {
+        "title": "ImageFile",
+        "type": "object",
+        "required": [
+          "url"
+        ],
+        "x-fal-order-properties": [
+          "url",
+          "content_type",
+          "file_name",
+          "file_size",
+          "width",
+          "height"
+        ],
+        "properties": {
+          "content_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content Type",
+            "description": "The mime type of the file."
+          },
+          "file_size": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File Size",
+            "description": "The size of the file in bytes."
+          },
+          "width": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Width",
+            "description": "The width of the image"
+          },
+          "height": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Height",
+            "description": "The height of the image"
+          },
+          "file_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File Name",
+            "description": "The name of the file. It will be auto-generated if not provided."
+          },
+          "url": {
+            "title": "Url",
+            "description": "The URL where the file can be downloaded from.",
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

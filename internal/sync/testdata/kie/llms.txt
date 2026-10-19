@@ -1,0 +1,9 @@
+- Image    Models > GPT Image [GPT Image 2.5 Flare - Text to Image](https://docs.kie.ai/market/gpt/gpt-image-2-5-flare-text-to-image.md): ## Create Task
+- Video Models > Kling [Kling 3.0 Omni Text to Video](https://docs.kie.ai/market/kling/v3-omni-text-to-video.md): ## Query Task Status
+- Video Models > Bytedance [Bytedance Seedance 2.5](https://docs.kie.ai/market/bytedance/seedance-2-5.md): ## Query Task Status
+- Video Models > Gemini Omni [Gemini Omni 1.1 Flash](https://docs.kie.ai/market/google/gemini-omni-flash-1-1.md): ## Create Task
+- Image    Models > GPT Image [GPT Image 2.5 Flare 文生图](https://docs.kie.ai/cn/market/gpt/gpt-image-2-5-flare-text-to-image.md): ## 创建任务
+- Video Models > Kling [Kling 3.0 Omni 文生视频](https://docs.kie.ai/cn/market/kling/v3-omni-text-to-video.md): ## 查询任务状态
+- Video Models > Bytedance [Bytedance Seedance 2.5](https://docs.kie.ai/cn/market/bytedance/seedance-2-5.md): ## 查询任务状态
+- Video Models > Bytedance [Bytedance Seedance 2.5 Draft](https://docs.kie.ai/cn/market/bytedance/seedance-2-5-draft.md): ## 查询任务状态
+- Video Models > Gemini Omni [Gemini Omni 1.1 Flash](https://docs.kie.ai/cn/market/google/gemini-omni-flash-1-1.md): ## 创建任务

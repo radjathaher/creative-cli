@@ -1,0 +1,40 @@
+# GPT Image 2 API
+
+> GPT Image 2, OpenAI's latest image model, is capable of creating extremely detailed images with fine typography.
+
+
+## Overview
+
+- **Endpoint**: `https://fal.run/openai/gpt-image-2`
+- **Model ID**: `openai/gpt-image-2`
+- **Category**: text-to-image
+- **Kind**: inference
+**Tags**: gpt-image-2, openai, typography, chatgpt-images-2
+
+
+
+## Pricing
+
+Text tokens (per 1M): **$5.00** input, **$1.25** cached, **$10.00** output.
+Image tokens (per 1M): **$8.00** input, **$2.00** cached, **$30.00** output. Changing the **quality** parameter significantly affects cost; by default we use **high**. Adjust it to your preference.
+See the description at the bottom of this page for more details on how much canonical image sizes cost. Total cost is rounded up to the closest hundredth of a cent ($0.0001.)
+
+For more details, see [fal.ai pricing](https://fal.ai/pricing).
+
+## API Information
+
+This model can be used via our HTTP API or more conveniently via our client libraries.
+See the input and output schema below, as well as the usage examples.
+
+
+### Input Schema
+
+The API accepts the following input parameters:
+
+
+- **`prompt`** (`string`, _required_):
+  The prompt for image generation
+  - Examples: "create a realistic image taken with iphone at these coordinates 41°43′32″N 49°56′49″W 15 April 1912"
+
+- **`image_size`** (`ImageSize | Enum`, _optional_):
+  The size of the generated image. Supports preset names, explicit {width, height}, or 'auto' to let the model pick the best size. Concrete sizes must have both dimensions as multiples of 16, max edge 3840px, aspect ratio <= 3:1, total pixels between 655,360 and 8,294,400. Default value: `landscape_4_3`

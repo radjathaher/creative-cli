@@ -1,0 +1,70 @@
+{
+  "models": [
+    {
+      "endpoint_id": "bytedance/seedance-2.5/us/text-to-video",
+      "metadata": {
+        "display_name": "Seedance 2.5 US Text to Video",
+        "category": "text-to-video",
+        "status": "active"
+      }
+    },
+    {
+      "endpoint_id": "bytedance/seedance-2.5/us/reference-to-video",
+      "metadata": {
+        "display_name": "Seedance 2.5 US Reference to Video",
+        "category": "image-to-video",
+        "status": "active"
+      }
+    },
+    {
+      "endpoint_id": "bytedance/seedance-2.5/us/image-to-video",
+      "metadata": {
+        "display_name": "Seedance 2.5 US Image to Video",
+        "category": "image-to-video",
+        "status": "active"
+      }
+    },
+    {
+      "endpoint_id": "google/gemini-omni-flash/v1.1/reference-to-video",
+      "metadata": {
+        "display_name": "Gemini Omni Flash 1.1 Reference to Video",
+        "category": "image-to-video",
+        "status": "active"
+      }
+    },
+    {
+      "endpoint_id": "openai/gpt-image-2.5/flare/edit",
+      "metadata": {
+        "display_name": "GPT Image 2.5 Flare Edit",
+        "category": "image-to-image",
+        "status": "active"
+      }
+    },
+    {
+      "endpoint_id": "openai/gpt-image-2",
+      "metadata": {
+        "display_name": "GPT Image 2 API",
+        "category": "text-to-image",
+        "status": "active"
+      }
+    },
+    {
+      "endpoint_id": "topaz/upscale/video/precision",
+      "metadata": {
+        "display_name": "Topaz Upscale Video Precision",
+        "category": "video-to-video",
+        "status": "active"
+      }
+    },
+    {
+      "endpoint_id": "tripo3d/h3.1/multiview-to-3d",
+      "metadata": {
+        "display_name": "Tripo H3.1 Multiview to 3D",
+        "category": "image-to-3d",
+        "status": "active"
+      }
+    }
+  ],
+  "has_more": true,
+  "next_cursor": "Mg"
+}

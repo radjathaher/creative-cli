@@ -21,6 +21,9 @@ type TranscribeParams struct {
 	Prompt      string   // optional style/vocabulary hint
 	Temperature *float64 // optional sampling temperature
 	Translate   bool     // translate to English instead of transcribing
+	// Granularities requests timestamp_granularities[], e.g. "word"; it needs
+	// Format verbose_json and a model that supports it (whisper-1).
+	Granularities []string
 }
 
 // TranscribeResult carries the transcript text plus provider metadata. The Raw
@@ -67,6 +70,9 @@ func Transcribe(p TranscribeParams) (*TranscribeResult, error) {
 	_ = w.WriteField("response_format", p.Format)
 	writeFieldIf(w, "language", p.Language)
 	writeFieldIf(w, "prompt", p.Prompt)
+	for _, g := range p.Granularities {
+		_ = w.WriteField("timestamp_granularities[]", g)
+	}
 	if p.Temperature != nil {
 		_ = w.WriteField("temperature", strconv.FormatFloat(*p.Temperature, 'f', -1, 64))
 	}

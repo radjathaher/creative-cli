@@ -1,0 +1,40 @@
+# Hunyuan3d V3
+
+> Transform your photos into ultra-high-resolution 3D models in seconds. Film-quality geometry with PBR textures, ready for games, e-commerce, and 3D printing.
+
+
+## Overview
+
+- **Endpoint**: `https://fal.run/fal-ai/hunyuan3d-v3/image-to-3d`
+- **Model ID**: `fal-ai/hunyuan3d-v3/image-to-3d`
+- **Category**: image-to-3d
+- **Kind**: inference
+
+
+## Pricing
+
+Your request will cost **$0.375** per generation. For **$1.00**, you can run this model **2** times.
+Generation types: Normal costs **$0.375**, LowPoly costs **$0.45**, Geometry costs **$0.225**.
+Enabling PBR materials adds **$0.15**. Using multi-view images (back/left/right) adds **$0.15**. Custom face count adds **$0.15**.
+
+For more details, see [fal.ai pricing](https://fal.ai/pricing).
+
+## API Information
+
+This model can be used via our HTTP API or more conveniently via our client libraries.
+See the input and output schema below, as well as the usage examples.
+
+
+### Input Schema
+
+The API accepts the following input parameters:
+
+
+- **`input_image_url`** (`string`, _required_):
+  URL of image to use while generating the 3D model.
+  - Examples: "https://v3b.fal.media/files/b/0a865ab1/omYcawLUo4RZbO8J6ZgZR.png"
+
+- **`enable_safety_checker`** (`boolean`, _optional_):
+  Authorized callers may set false to request relaxed screening. Default value: `true`
+  - Default: `true`
+

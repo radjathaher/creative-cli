@@ -45,6 +45,9 @@ type ImageParams struct {
 	OutputFormat string
 	N            int
 	Refs         []string // when non-empty, uses the edits (img2img) endpoint
+	// Backend pins the route: "codex-lb" or "openai". A pinned backend never
+	// falls back to the other one.
+	Backend string
 }
 
 // ImageResult carries the decoded bytes of the first image plus provider metadata.
@@ -68,7 +71,7 @@ type imageResponse struct {
 // Generate produces images. With Refs it uses /v1/images/edits (img2img); other-
 // wise /v1/images/generations (text2img). The first image is returned decoded.
 func Generate(p ImageParams) (*ImageResult, error) {
-	backend, err := resolveImageBackend()
+	backend, err := pinnedImageBackend(p.Backend)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +90,7 @@ func Generate(p ImageParams) (*ImageResult, error) {
 	ctx, cancel := context.WithTimeout(p.Context, p.Timeout)
 	defer cancel()
 	p.Context = ctx
-	return p.generateWithBackend(backend, true)
+	return p.generateWithBackend(backend, p.Backend == "")
 }
 
 func (p ImageParams) generateWithBackend(backend imageBackend, allowFallback bool) (*ImageResult, error) {

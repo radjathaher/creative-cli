@@ -1,0 +1,150 @@
+{
+  "openapi": "3.0.4",
+  "paths": {
+    "/google/gemini-omni-flash/v1.1/reference-to-video": {
+      "post": {
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeminiOmniFlashV11ReferenceToVideoInput"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GeminiOmniFlashV11ReferenceToVideoInput": {
+        "title": "Omni11FlashReferenceToVideoInput",
+        "type": "object",
+        "required": [
+          "prompt"
+        ],
+        "x-fal-order-properties": [
+          "prompt",
+          "image_urls",
+          "reference_video_urls",
+          "aspect_ratio",
+          "resolution",
+          "duration"
+        ],
+        "properties": {
+          "reference_video_urls": {
+            "maxItems": 3,
+            "items": {
+              "type": "string"
+            },
+            "title": "Reference Video URLs",
+            "type": "array",
+            "description": "URLs of up to three reference videos. Each video must be at most ten seconds long."
+          },
+          "duration": {
+            "default": 8,
+            "title": "Duration",
+            "maximum": 10,
+            "type": "integer",
+            "minimum": 3,
+            "description": "The duration of the generated video, in seconds."
+          },
+          "image_urls": {
+            "maxItems": 10,
+            "items": {
+              "type": "string"
+            },
+            "title": "Image URLs",
+            "type": "array",
+            "description": "URLs of reference images to incorporate into the video."
+          },
+          "resolution": {
+            "default": "720p",
+            "title": "Resolution",
+            "type": "string",
+            "description": "The resolution of the generated video.",
+            "enum": [
+              "360p",
+              "720p",
+              "1080p",
+              "4k"
+            ]
+          },
+          "aspect_ratio": {
+            "default": "16:9",
+            "title": "Aspect Ratio",
+            "type": "string",
+            "description": "The aspect ratio of the generated video.",
+            "enum": [
+              "16:9",
+              "9:16"
+            ]
+          },
+          "prompt": {
+            "title": "Prompt",
+            "description": "The text prompt describing the video. Reference media is sent in list order before the prompt.",
+            "type": "string",
+            "maxLength": 20000
+          }
+        }
+      },
+      "File": {
+        "properties": {
+          "content_type": {
+            "description": "The mime type of the file.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content Type"
+          },
+          "file_size": {
+            "description": "The size of the file in bytes.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File Size"
+          },
+          "url": {
+            "description": "The URL where the file can be downloaded from.",
+            "type": "string",
+            "title": "Url"
+          },
+          "file_name": {
+            "description": "The name of the file. It will be auto-generated if not provided.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File Name"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "x-fal-order-properties": [
+          "url",
+          "content_type",
+          "file_name",
+          "file_size"
+        ],
+        "type": "object",
+        "title": "File"
+      }
+    }
+  }
+}

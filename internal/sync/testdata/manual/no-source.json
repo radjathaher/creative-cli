@@ -1,0 +1,1 @@
+[{"provider": "openai", "model_id": "x", "op": "image.t2i", "family": "x", "price": {"unit": "image", "value_usd": 1}}]

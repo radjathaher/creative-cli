@@ -1,0 +1,141 @@
+{
+  "openapi": "3.0.4",
+  "paths": {
+    "/fal-ai/elevenlabs/speech-to-text/scribe-v2": {
+      "post": {
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ElevenlabsSpeechToTextScribeV2Input"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ElevenlabsSpeechToTextScribeV2Input": {
+        "required": [
+          "audio_url"
+        ],
+        "title": "SpeechToTextRequestScribeV2",
+        "properties": {
+          "audio_url": {
+            "title": "Audio Url",
+            "description": "URL of the audio file to transcribe",
+            "type": "string"
+          },
+          "tag_audio_events": {
+            "title": "Tag Audio Events",
+            "default": true,
+            "description": "Tag audio events like laughter, applause, etc.",
+            "type": "boolean"
+          },
+          "diarize": {
+            "title": "Diarize",
+            "default": true,
+            "description": "Whether to annotate who is speaking",
+            "type": "boolean"
+          },
+          "keyterms": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Keyterms",
+            "default": [],
+            "maxItems": 100,
+            "description": "Words or sentences to bias the model towards transcribing. Up to 100 keyterms, max 50 characters each. Adds 30% premium over base transcription price.",
+            "type": "array"
+          },
+          "language_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language Code",
+            "description": "Language code of the audio"
+          }
+        },
+        "x-fal-order-properties": [
+          "audio_url",
+          "language_code",
+          "tag_audio_events",
+          "diarize",
+          "keyterms"
+        ],
+        "type": "object"
+      },
+      "TranscriptionWord": {
+        "required": [
+          "text",
+          "type"
+        ],
+        "title": "TranscriptionWord",
+        "properties": {
+          "start": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start",
+            "description": "Start time in seconds"
+          },
+          "type": {
+            "title": "Type",
+            "description": "Type of element (word, spacing, or audio_event)",
+            "type": "string"
+          },
+          "end": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End",
+            "description": "End time in seconds"
+          },
+          "speaker_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Speaker Id",
+            "description": "Speaker identifier if diarization was enabled"
+          },
+          "text": {
+            "title": "Text",
+            "description": "The transcribed word or audio event",
+            "type": "string"
+          }
+        },
+        "x-fal-order-properties": [
+          "text",
+          "start",
+          "end",
+          "type",
+          "speaker_id"
+        ],
+        "type": "object"
+      }
+    }
+  }
+}

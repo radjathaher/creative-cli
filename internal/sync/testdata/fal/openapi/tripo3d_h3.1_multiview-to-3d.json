@@ -1,0 +1,282 @@
+{
+  "openapi": "3.0.4",
+  "paths": {
+    "/tripo3d/h3.1/multiview-to-3d": {
+      "post": {
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/H31MultiviewTo3dInput"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "H31MultiviewTo3dInput": {
+        "properties": {
+          "auto_size": {
+            "title": "Auto Size",
+            "description": "Auto-scale the model to real-world dimensions (meters).",
+            "type": "boolean",
+            "default": false
+          },
+          "orientation": {
+            "enum": [
+              "default",
+              "align_image"
+            ],
+            "title": "Orientation",
+            "description": "Model orientation.",
+            "type": "string",
+            "default": "default"
+          },
+          "image_urls": {
+            "minItems": 2,
+            "title": "Image Urls",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 4,
+            "type": "array",
+            "description": "2 to 4 image URLs of the same object from different angles. Order: [front, left, back, right]. Front view is required."
+          },
+          "texture_quality": {
+            "enum": [
+              "standard",
+              "detailed"
+            ],
+            "title": "Texture Quality",
+            "description": "Quality level for textures.",
+            "type": "string",
+            "default": "standard"
+          },
+          "texture": {
+            "title": "Texture",
+            "description": "Whether to generate textures for the model.",
+            "type": "boolean",
+            "default": true
+          },
+          "texture_seed": {
+            "title": "Texture Seed",
+            "description": "Seed for texture generation reproducibility.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "texture_alignment": {
+            "enum": [
+              "original_image",
+              "geometry"
+            ],
+            "title": "Texture Alignment",
+            "description": "How textures are aligned.",
+            "type": "string",
+            "default": "original_image"
+          },
+          "pbr": {
+            "title": "Pbr",
+            "description": "Whether to generate PBR (Physically Based Rendering) materials. If true, texture is also enabled.",
+            "type": "boolean",
+            "default": true
+          },
+          "geometry_quality": {
+            "enum": [
+              "standard",
+              "detailed"
+            ],
+            "title": "Geometry Quality",
+            "description": "Quality level for geometry.",
+            "type": "string",
+            "default": "standard"
+          },
+          "model_seed": {
+            "title": "Model Seed",
+            "description": "Seed for geometry generation reproducibility.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "enable_safety_checker": {
+            "title": "Enable Safety Checker",
+            "description": "Authorized callers may set false to request relaxed screening.",
+            "type": "boolean",
+            "default": true
+          },
+          "face_limit": {
+            "title": "Face Limit",
+            "description": "Target number of faces for the generated mesh. If not set, the model adaptively determines the count.",
+            "anyOf": [
+              {
+                "maximum": 2000000,
+                "minimum": 1000,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "quad": {
+            "title": "Quad",
+            "description": "Generate quad (4-sided) mesh topology instead of triangles. When Tripo emits FBX bytes for quad output, the returned model file is FBX.",
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "title": "FullMultiviewTo3DInput",
+        "required": [
+          "image_urls"
+        ],
+        "description": "Input for Multiview to 3D generation using full-featured models (H3.1, v2.5).\n\nProvide 2-4 images of the same object from different angles.\nImages should be in order: [front, left, back, right].\nFront view is required; others are optional.\nNote: P1 is not available for multiview-to-3d.",
+        "x-fal-order-properties": [
+          "image_urls",
+          "face_limit",
+          "texture",
+          "pbr",
+          "model_seed",
+          "texture_seed",
+          "texture_quality",
+          "geometry_quality",
+          "texture_alignment",
+          "auto_size",
+          "orientation",
+          "quad",
+          "enable_safety_checker"
+        ],
+        "type": "object"
+      },
+      "File": {
+        "properties": {
+          "file_name": {
+            "title": "File Name",
+            "description": "The name of the file. It will be auto-generated if not provided.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "content_type": {
+            "title": "Content Type",
+            "description": "The mime type of the file.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "url": {
+            "title": "Url",
+            "description": "The URL where the file can be downloaded from.",
+            "type": "string"
+          },
+          "file_size": {
+            "title": "File Size",
+            "description": "The size of the file in bytes.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "File",
+        "required": [
+          "url"
+        ],
+        "x-fal-order-properties": [
+          "url",
+          "content_type",
+          "file_name",
+          "file_size"
+        ],
+        "type": "object"
+      },
+      "ModelUrls": {
+        "properties": {
+          "glb": {
+            "title": "GLB",
+            "description": "GLB format 3D model",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/File"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "base_model": {
+            "description": "Base (untextured) model",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/File"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fbx": {
+            "title": "FBX",
+            "description": "FBX format 3D model",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/File"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "pbr_model": {
+            "title": "PBR Model",
+            "description": "PBR-textured model",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/File"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "ModelUrls",
+        "description": "3D model download URLs",
+        "x-fal-order-properties": [
+          "glb",
+          "fbx",
+          "base_model",
+          "pbr_model"
+        ],
+        "type": "object"
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+# Seedance 2.5 US Image to Video
+
+> US-hosted ByteDance Seedance 2.5 animates still images with synchronized audio and optional end-frame control. Generate videos up to 30 seconds at 480p, 720p or 1080p.
+
+
+## Overview
+
+- **Endpoint**: `https://fal.run/bytedance/seedance-2.5/us/image-to-video`
+- **Model ID**: `bytedance/seedance-2.5/us/image-to-video`
+- **Category**: image-to-video
+- **Kind**: inference
+**Tags**: stylized, transform, lipsync
+
+
+
+## Pricing
+
+For 480p, your request will cost roughly **$0.2205** per second of generated video, for 720p, you will be charged roughly **$0.4730** per second of generated video, and for 1080p, roughly **$1.164** per second of generated video. Your request will cost **$0.0214** per 1000 tokens for 480p and 720p video and roughly **$0.0234** per 1000 tokens for 1080p. The number of tokens is roughly given by (height of output video * width of output video * (input video duration + output video duration) * 24) / 1024.
+
+For more details, see [fal.ai pricing](https://fal.ai/pricing).
+
+## API Information
+
+This model can be used via our HTTP API or more conveniently via our client libraries.
+See the input and output schema below, as well as the usage examples.
+
+
+### Input Schema
+
+The API accepts the following input parameters:
+
+
+- **`prompt`** (`string`, _optional_):
+  The text prompt describing the desired motion and action for the video.
+  - Examples: "An octopus finds a football in the ocean and excitedly calls its octopus friends to come and play. Cut scene to an octopus football game under the sea."
+
+- **`image_url`** (`string`, _required_):
+  The URL of the starting frame image to animate. Supported formats: JPEG, PNG, WebP. Max 30 MB.
+  - Examples: "https://v3b.fal.media/files/b/0a8eba37/Cqg-4Uwzyz4DELfceT1CF_a17e588773ec45b1a9e6f100a787b80b.jpg"
+

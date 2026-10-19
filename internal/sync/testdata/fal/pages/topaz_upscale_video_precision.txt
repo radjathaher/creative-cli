@@ -1,0 +1,40 @@
+# Topaz Upscale Video Precision
+
+> Professional video upscaling powered by Topaz Labs. Precision models (Proteus, Artemis, Iris, Dione, Theia, Gaia, Rhea) enhance footage up to 4x while staying faithful to the source. Best for clean, natural upscales of real-world footage.
+
+
+## Overview
+
+- **Endpoint**: `https://fal.run/topaz/upscale/video/precision`
+- **Model ID**: `topaz/upscale/video/precision`
+- **Category**: video-to-video
+- **Kind**: inference
+**Tags**: upscale, video
+
+
+
+## Pricing
+
+Your request will cost **$0.10** per 10 seconds of output at 720p, **$0.20** at 1080p, and **$0.60** at 4K with the precision models (Proteus, Artemis, Iris, Dione, Theia, Gaia HQ/CG, and Rhea). Proteus Natural (2x only) costs **$0.10** per 10 seconds at 720p, **$0.20** at 1080p, and **$0.50** at 4K. Gaia 2 (2x, animation) costs **$0.10** at 720p or 1080p and **$0.30** at 4K. Longer clips scale with duration, with credits rounded once per job: a 1-minute upscale with the standard precision models costs **$0.40** at 720p, **$0.80** at 1080p, and **$3.10** at 4K. These examples assume 30 fps. The final cost depends on output resolution, duration, and frame rate.
+
+For more details, see [fal.ai pricing](https://fal.ai/pricing).
+
+## API Information
+
+This model can be used via our HTTP API or more conveniently via our client libraries.
+See the input and output schema below, as well as the usage examples.
+
+
+### Input Schema
+
+The API accepts the following input parameters:
+
+
+- **`video_url`** (`string`, _required_):
+  URL of the video to upscale
+  - Examples: "https://v3.fal.media/files/kangaroo/y5-1YTGpun17eSeggZMzX_video-1733468228.mp4"
+
+- **`model`** (`ModelEnum`, _optional_):
+  Precision (non-generative) enhancement model. Proteus fits most real-world footage; Proteus Natural is a softer variant; Iris recovers faces; Dione deinterlaces legacy/interlaced sources; Artemis denoises and sharpens degraded footage; Gaia refines high-quality footage and CG (Gaia 2 upscales animation at 2x); Rhea maximizes fine detail via an internal 4x pass; Theia gives manual detail/fidelity control. Default value: `"Proteus"`
+  - Default: `"Proteus"`
+  - Options: `"Proteus"`, `"Proteus Natural"`, `"Iris"`, `"Iris Low Quality"`, `"Dione DV"`, `"Dione TV"`, `"Dione Robust"`, `"Dione Dehalo"`, `"Dione Robust Dehalo"`, `"Artemis High Quality"`, `"Artemis Medium Quality"`, `"Artemis Low Quality"`, `"Artemis Strong Halo"`, `"Artemis Medium Halo"`, `"Artemis Aliasing & Moire"`, `"Gaia HQ"`, `"Gaia CG"`, `"Gaia 2"`, `"Rhea"`, `"Theia Fine Tune Detail"`, `"Theia Fine Tune Fidelity"`
