@@ -68,7 +68,9 @@ func Start(ctx context.Context, a Adapter, r registry.Route, req Request, est re
 	if err := Save(rec); err != nil {
 		return rec, fmt.Errorf("job submitted as %s but could not be saved: %w", sub.ProviderJobID, err)
 	}
-	core.Progress("submitted %s → %s (job %s)", r.ID, sub.ProviderJobID, rec.JobID)
+	if sub.ProviderJobID != "" {
+		core.Progress("submitted %s → %s (job %s)", r.ID, sub.ProviderJobID, rec.JobID)
+	}
 	if len(sub.Immediate) > 0 {
 		return finish(rec, PollResult{Status: StatusDone, Outputs: sub.Immediate, ActualUSD: sub.ActualUSD}, start)
 	}

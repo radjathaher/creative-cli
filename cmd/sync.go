@@ -27,6 +27,7 @@ CI runs this with --out to refresh the embedded snapshot.`,
 		}
 		c.Flags().String("out", "", "write here instead of the local cache (CI: internal/registry/data/routes.json.gz)")
 		c.Flags().StringSlice("only", nil, "sync only these providers, e.g. --only kie,segmind")
+		c.Flags().Bool("full", false, "refetch every fal price (slow: fal rate-limits its pricing API); CI uses this")
 		root.AddCommand(c)
 	})
 }
@@ -36,7 +37,7 @@ func runSync(c *cobra.Command, _ []string) error {
 	if err != nil {
 		return err
 	}
-	sources := csync.AllSources()
+	sources := csync.AllSources(&prev.Catalog, flagBool(c, "full"))
 	if only := flagStrSlice(c, "only"); len(only) > 0 {
 		sources = filterSources(sources, only)
 		if len(sources) == 0 {
@@ -44,7 +45,7 @@ func runSync(c *cobra.Command, _ []string) error {
 		}
 	}
 	cat := csync.Run(context.Background(), sources, &prev.Catalog)
-	if len(sources) < len(csync.AllSources()) {
+	if len(sources) < len(csync.AllSources(nil, false)) {
 		cat = mergeInto(&prev.Catalog, cat, sources)
 	}
 	path := flagStr(c, "out")

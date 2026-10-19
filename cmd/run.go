@@ -11,9 +11,11 @@ import (
 
 	"github.com/radjathaher/creative-cli/internal/adapter"
 	_ "github.com/radjathaher/creative-cli/internal/adapter/elevenlabs"
+	_ "github.com/radjathaher/creative-cli/internal/adapter/fal"
 	_ "github.com/radjathaher/creative-cli/internal/adapter/kie"
 	_ "github.com/radjathaher/creative-cli/internal/adapter/openai"
 	_ "github.com/radjathaher/creative-cli/internal/adapter/segmind"
+	"github.com/radjathaher/creative-cli/internal/core"
 	"github.com/radjathaher/creative-cli/internal/job"
 	"github.com/radjathaher/creative-cli/internal/quote"
 	"github.com/radjathaher/creative-cli/internal/registry"
@@ -61,6 +63,7 @@ prices). The job is saved before polling, so --no-wait and later
 	addRouteFlags(c)
 	addJobFlags(c)
 	f := c.Flags()
+	f.String("route", "", "exact route id from `creative quote` or `creative models` (overrides --family/--provider)")
 	f.String("prompt", "", "text prompt")
 	f.String("prompt-file", "", "read the prompt from this file (hashed into the job record)")
 	f.String("text", "", "text to speak (voice.tts)")
@@ -86,7 +89,26 @@ func runOp(c *cobra.Command, op string, args []string) error {
 		return err
 	}
 	qr := readQuoteRequest(c, op)
+	if transformOps[op] && len(args) == 1 && qr.Job.DurationSecs == 0 {
+		// Transform jobs are priced by the length of the media they transform.
+		if md, err := core.ProbeVideo(args[0]); err == nil {
+			qr.Job.DurationSecs = md.DurationSeconds
+		}
+	}
+	if id := flagStr(c, "route"); id != "" {
+		r, ok := l.Find(id)
+		if !ok {
+			return fmt.Errorf("unknown route %q; list routes with `creative models %s --all`", id, op)
+		}
+		if r.Op != op {
+			return fmt.Errorf("route %s serves %s, not %s", id, r.Op, op)
+		}
+		qr.Family, qr.Variant, qr.Provider, qr.All = r.Family, r.Variant, r.Provider, true
+	}
 	res := quote.Build(l, qr, statusMap(false))
+	if id := flagStr(c, "route"); id != "" {
+		res.Routes = onlyRoute(res.Routes, id)
+	}
 	route, cand, err := pickRoute(l, res, qr)
 	if err != nil {
 		return err
@@ -122,6 +144,15 @@ func runOp(c *cobra.Command, op string, args []string) error {
 	return err
 }
 
+func onlyRoute(cs []quote.Candidate, id string) []quote.Candidate {
+	for _, c := range cs {
+		if c.RouteID == id {
+			return []quote.Candidate{c}
+		}
+	}
+	return nil
+}
+
 // pickRoute enforces explicit routing: exactly one candidate must remain.
 func pickRoute(l *registry.Loaded, res quote.Result, qr quote.Request) (registry.Route, quote.Candidate, error) {
 	switch len(res.Routes) {
@@ -136,7 +167,7 @@ func pickRoute(l *registry.Loaded, res quote.Result, qr quote.Request) (registry
 		return r, res.Routes[0], nil
 	}
 	var b strings.Builder
-	fmt.Fprintf(&b, "%d routes match; choose one with --provider (and --family/--variant):", len(res.Routes))
+	fmt.Fprintf(&b, "%d routes match; choose one with --route <id> (or narrow --provider/--family/--variant):", len(res.Routes))
 	for _, c := range res.Routes {
 		cost := "price unknown"
 		if c.Estimate.USD != nil {
@@ -157,6 +188,8 @@ func readJobRequest(c *cobra.Command, args []string) (job.Request, error) {
 	}
 	if len(args) == 1 {
 		req.Input = args[0]
+		// For transforms, duration describes the input and only prices the job.
+		req.Duration = 0
 	}
 	if pf := flagStr(c, "prompt-file"); pf != "" {
 		b, err := os.ReadFile(pf)

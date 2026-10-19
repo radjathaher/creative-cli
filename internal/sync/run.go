@@ -10,8 +10,10 @@ import (
 )
 
 // AllSources lists every provider source in the order their routes are merged.
-func AllSources() []Source {
-	return []Source{NewFal(), NewOpenRouter(), KIE{}, Segmind{}, Manual{}}
+// With full false, fal reuses prices from prev that are under 7 days old, which
+// turns an 11-minute rate-limited crawl into seconds; CI passes full.
+func AllSources(prev *registry.Catalog, full bool) []Source {
+	return []Source{NewFalWithPrior(prev, full), NewOpenRouter(), KIE{}, Segmind{}, Manual{}}
 }
 
 // Run fetches every source concurrently and merges the results into one

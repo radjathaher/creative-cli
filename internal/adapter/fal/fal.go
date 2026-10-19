@@ -12,6 +12,7 @@ import (
 	"strings"
 	gosync "sync"
 
+	"github.com/radjathaher/creative-cli/internal/adapter"
 	"github.com/radjathaher/creative-cli/internal/adapter/reqmap"
 	"github.com/radjathaher/creative-cli/internal/core"
 	"github.com/radjathaher/creative-cli/internal/fal"
@@ -30,7 +31,9 @@ type Adapter struct {
 // New returns a fal adapter.
 func New() *Adapter { return &Adapter{} }
 
-var _ job.Adapter = (*Adapter)(nil)
+// The adapter caches its client behind a sync.Once, so it registers as a
+// pointer; Adapter{} by value would copy the lock.
+func init() { adapter.Register(New(), "fal-queue") }
 
 func (a *Adapter) fal() (*fal.Client, error) {
 	a.once.Do(func() { a.client, a.err = fal.New() })

@@ -16,6 +16,36 @@ Designed for AGENT CONSUMPTION. Non-interactive: every input is a flag, every
 result is JSON on stdout. There is no prompt, menu, or confirmation. Progress and
 errors go to stderr; stdout is pure JSON so you can pipe it into jq.
 
+ROUTER (v0.3+, preferred): op = what you make, family = model, provider = route.
+  creative keys --table                      which keys resolve + live balances (KIE, ElevenLabs)
+  creative ops --table                       every operation (image.t2i, video.r2v, voice.tts, stt, 3d.i2mesh, ...)
+  creative models <op> --table [--all]       families x providers for an op (image/video use an allowlist)
+  creative quote <op> --family F [job flags] --table
+                                             every route that ACCEPTS the inputs, cheapest first, with price
+                                             source/date and USABLE (key + balance). Never runs anything.
+  creative describe <route-id>               flags, limits, price, input schema of one route
+  creative <op> --family F --provider P [--prompt|--prompt-file] [--image/--video/--audio ...in order]
+       [--duration --res --aspect --fps --quality --seed] [--param key=value]
+       [--run NAME --max-cost USD --max-run-cost USD] [--dry-run] [--no-wait] --out FILE
+  creative jobs list --run NAME --table      job history + cost total; jobs get <id>; jobs fetch <id> (resume)
+  creative sync                              refresh models + prices (free; ~1-2 min); prices older than 7 days
+                                             are flagged stale in quotes - ask the user before syncing.
+
+  Rules: routing is explicit (2+ routes and no --provider = error listing prices); no fallback between
+  providers; jobs are saved before polling so --no-wait + jobs fetch is always safe. Owner pins:
+  gpt-image-2 -> codex-lb (or openai); gpt-image-2.5 (flare|sunburst) -> openai only.
+  Owner policy: never gpt-image for realistic people; no AI music/SFX in ads (fine for the game).
+
+  Typical routes (2026-10-19 prices; always re-quote):
+    image.t2i   gpt-image-2 codex-lb ($0) | gpt-image-2.5 flare/sunburst openai (~$0.014 medium, ~$0.053 high)
+    video.t2v/i2v/r2v  seedance-2.5 segmind ($0.1065/s 480p, $0.239/s 720p; video refs OK)
+    video.r2v   gemini-omni-flash-1.1 fal ($0.10/s 720p; up to 3 ref videos) - segmind omni has no video refs
+    video.upscale INPUT --family topaz --variant precision --provider fal --fps 50
+                --param model="Gaia HQ" --param upscale_factor=1.5 --param recover_detail=0.2 --param H264_output=true
+    voice.tts   elevenlabs direct (--text, --param voice_id=...)   stt INPUT scribe-v2 elevenlabs (word timestamps)
+    voice.dub INPUT --param language=es (elevenlabs only) · music/sfx/3d: quote first
+
+LEGACY VERBS (v0.2, still work; prefer the router above):
 MENTAL MODEL
   Pick a verb by the ASSET you want out. Providers are an implementation detail
   selected by a smart --provider default you can override.
