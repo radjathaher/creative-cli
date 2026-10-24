@@ -1,0 +1,56 @@
+name: sync
+
+# Refreshes the embedded route snapshot (models, schemas, prices) once a day and
+# opens a pull request only when routes or prices changed. Timestamps and
+# as-of dates alone never produce a pull request. The sync reads free catalog and pricing
+# endpoints and never calls a generation endpoint.
+on:
+  schedule:
+    - cron: "17 21 * * *" # 04:17 WIB
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.25.7"
+      - name: Sync registry
+        env:
+          # fal's pricing endpoint needs a key; without it the fal routes from
+          # the previous snapshot are kept and the run reports the error.
+          FAL_KEY: ${{ secrets.FAL_KEY }}
+        run: |
+          cp internal/registry/data/routes.json.gz /tmp/before.json.gz
+          go run . sync --full --out internal/registry/data/routes.json.gz
+      - name: Detect real changes
+        id: diff
+        run: |
+          norm() { zcat "$1" | jq -S 'del(.generated_at) | .sources |= map_values(del(.fetched_at)) | .routes |= map(del(.price.as_of))'; }
+          if diff -q <(norm /tmp/before.json.gz) <(norm internal/registry/data/routes.json.gz) >/dev/null; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            zcat internal/registry/data/routes.json.gz | jq -r '.sources | to_entries[] | "- \(.key): \(.value.routes) routes\(if .value.error then " (error: \(.value.error))" else "" end)"' > /tmp/summary.md
+          fi
+      - name: Open pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          branch="chore/registry-sync-$(date -u +%Y%m%d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add internal/registry/data/routes.json.gz
+          git commit -m "chore(registry): sync routes and prices $(date -u +%F)"
+          git push -f origin "$branch"
+          gh pr create --base main --head "$branch" \
+            --title "chore(registry): sync routes and prices $(date -u +%F)" \
+            --body-file /tmp/summary.md || gh pr edit "$branch" --body-file /tmp/summary.md
