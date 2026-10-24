@@ -14,7 +14,7 @@ func init() {
 			Args:  cobra.ExactArgs(1),
 			RunE:  runAnalyze,
 		}
-		c.Flags().String("model", "google/gemini-2.5-flash", "OpenRouter model id")
+		c.Flags().String("model", "google/gemini-3.8-flash", "OpenRouter model id")
 		c.Flags().Float64("temperature", 1.0, "sampling temperature (0-2)")
 		c.Flags().Int("max-output-tokens", 4096, "max output tokens")
 		c.Flags().String("prompt", "", "extra instruction appended to the brief prompt")

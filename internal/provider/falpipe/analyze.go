@@ -18,7 +18,7 @@ const analyzeEndpoint = "openrouter/router/video"
 // AnalyzeOpts configures a video-analysis (recreation brief) job.
 type AnalyzeOpts struct {
 	Input            string
-	Model            string // OpenRouter model id, e.g. google/gemini-2.5-flash
+	Model            string // OpenRouter model id, e.g. google/gemini-3.8-flash
 	Temperature      float64
 	MaxOutputTokens  int
 	Prompt           string // optional extra instruction appended to the brief prompt
@@ -46,6 +46,9 @@ func Analyze(o AnalyzeOpts, pretty, raw bool) (*core.Envelope, json.RawMessage, 
 		"model":       o.Model,
 		"temperature": o.Temperature,
 		"max_tokens":  o.MaxOutputTokens,
+		// Current Gemini models on this route reject requests with reasoning
+		// disabled, so it is always on rather than exposed as a flag.
+		"reasoning": true,
 	}
 	core.Progress("analyzing video with %s", o.Model)
 	qref, qraw, err := client.Submit(analyzeEndpoint, body)

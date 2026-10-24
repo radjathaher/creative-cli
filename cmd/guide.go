@@ -69,7 +69,7 @@ VERB CATALOG (default provider · required credential)
   caption    fal->VEED (default)       FAL_KEY | ZAPCAP_*  INPUT; --provider veed|zapcap
   dub        ElevenLabs                ELEVENLABS_API_KEY  INPUT --language <iso>
   transcribe OpenAI Whisper            OPENAI_API_KEY      INPUT; --format text|srt|vtt|json|verbose-json
-  analyze    fal->OpenRouter->Gemini   FAL_KEY             INPUT (video/YouTube url) -> recreation brief
+  analyze    fal->OpenRouter->Gemini   FAL_KEY             INPUT (video/YouTube url) -> recreation brief; default google/gemini-3.8-flash
 
 CREDENTIALS  (resolved: env var first, then /run/secrets/<NAME>)
   OPENAI_API_KEY  CODEX_LB_API_KEY  SEGMIND_API_KEY  ELEVENLABS_API_KEY  FAL_KEY  ZAPCAP_API_KEY
