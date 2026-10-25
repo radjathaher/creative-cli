@@ -36,7 +36,7 @@ func readQuoteRequest(c *cobra.Command, op string) quote.Request {
 	images, videos, audios := flagStrs(c, "image"), flagStrs(c, "video"), flagStrs(c, "audio")
 	req := quote.Request{
 		Op: op, Family: flagStr(c, "family"), Variant: flagStr(c, "variant"),
-		Provider: flagStr(c, "provider"), All: flagBool(c, "all"), Runnable: adapter.Runnable,
+		Provider: flagStr(c, "provider"), All: flagBool(c, "all"), Runnable: runnableRoute,
 		Images: len(images), Videos: len(videos), Audios: len(audios),
 		Job: registry.Job{
 			DurationSecs: flagFloat(c, "duration"), Resolution: flagStr(c, "res"),
@@ -53,4 +53,11 @@ func readQuoteRequest(c *cobra.Command, op string) quote.Request {
 		}
 	}
 	return req
+}
+
+func runnableRoute(r registry.Route) bool {
+	if r.Op == registry.OpBrollSearch || r.Op == registry.OpBrollGet {
+		return r.Transport == "broll-http" && (r.Provider == "pexels" || r.Provider == "pixabay")
+	}
+	return adapter.Runnable(r)
 }

@@ -29,6 +29,9 @@ var Credentials = map[string][]string{
 	"zapcap":     {"ZAPCAP_API_KEY"},
 	"tripo":      {"TRIPO_API_KEY"},
 	"meshy":      {"MESHY_API_KEY"},
+	"pexels":     {"PEXELS_API_KEY"},
+	"pixabay":    {"PIXABAY_API_KEY"},
+	"pond5-pd":   {},
 }
 
 // Status is one provider's credential and balance state.
@@ -55,6 +58,9 @@ func Check(provider string) Status {
 		}
 	}
 	st.Configured = len(st.Missing) == 0
+	if provider == "pond5-pd" {
+		st.Note = "no key required; public-domain API blocked/unverified; downloads unavailable"
+	}
 	return st
 }
 
@@ -98,11 +104,15 @@ func CheckAll(ctx context.Context, withBalance bool) []Status {
 
 // Providers returns provider names in a stable display order.
 func Providers() []string {
-	return []string{"codex-lb", "openai", "segmind", "fal", "kie", "elevenlabs", "openrouter", "google", "zapcap", "tripo", "meshy"}
+	return []string{"codex-lb", "openai", "segmind", "fal", "kie", "elevenlabs", "openrouter", "google", "zapcap", "tripo", "meshy", "pexels", "pixabay", "pond5-pd"}
 }
 
 func balance(ctx context.Context, s *Status) {
 	switch s.Provider {
+	case "pexels", "pixabay":
+		s.Note = "free stock footage; no balance lookup"
+	case "pond5-pd":
+		return
 	case "kie":
 		key, _ := secret("KIE_API_KEY")
 		var r struct {

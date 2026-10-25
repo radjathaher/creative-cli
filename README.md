@@ -38,6 +38,56 @@ go build -o creative .
 Credentials resolve from the environment first, then `/run/secrets/<NAME>` — the
 same convention every sibling CLI uses.
 
+## Stock B-roll
+
+Search and download free stock MP4 footage without AI generation. Select a
+provider explicitly; there is no automatic fallback.
+
+```bash
+creative broll.search --query "old printing press" --provider pexels --table
+creative broll.search --query "tired older man" --provider pixabay \
+  --orientation portrait --min-duration 5 --max-duration 30 --limit 20
+creative broll.get pexels:12345 --out press.mp4
+creative broll.get 125 --provider pixabay --quality 4k --out clip.mp4
+```
+
+| Provider | Credential | Status |
+|----------|------------|--------|
+| `pexels` | `PEXELS_API_KEY` | Fixture-tested; live verification needs a key |
+| `pixabay` | `PIXABAY_API_KEY` | Fixture-tested; live verification needs a key |
+| `pond5-pd` | None | Blocked: search API returns HTTP 403; licence schema and download endpoint unverified |
+
+`creative ops`, `models broll.search`, `describe pexels:broll.search`, and
+`keys --table` include the stock providers. Search returns a JSON array, with
+provider-prefixed IDs, selected-file dimensions, source/preview/author URLs,
+licence name and URL, and `cost_usd: 0`. `--table` prints human-readable rows.
+
+Each search makes at most one API request. Filters can reduce the result count;
+there is no page fan-out. `--limit` defaults to 20 (Pexels maximum 80; Pixabay
+maximum 200). Pixabay API responses are cached for 24 hours under
+`$XDG_CACHE_HOME/creative/broll` (normally `~/.cache/creative/broll`).
+
+Both commands select the largest matching MP4 up to 1920 pixels on its longest
+edge by default. `--quality sd|hd|4k|best` sets a maximum of 960, 1920, 4096, or
+unlimited pixels. Clips with no matching file are omitted; no automatic 4K upgrade.
+
+Downloads create `FILE` and `FILE.json`, refusing to replace either existing
+file. The sidecar records licence, source, author, exact download URL, dimensions,
+duration, UTC fetch timestamp, SHA-256, attribution note, and the last local search
+query when known. Failed transfers remove temporary files. Download output is one
+JSON object. These commands keep their normalized output even with `--raw`.
+
+Licences: [Pexels License](https://www.pexels.com/license/) and
+[Pixabay Content License](https://pixabay.com/service/license-summary/).
+Free footage is not automatic clearance for every ad. Do not imply endorsement
+or resell footage on its own; check the rights that apply to the intended use.
+[Pond5 identifies Public Domain Project videos as editorial-only](https://www.pond5.com/help/en/articles/10086064-where-can-i-find-free-footage-photos-and-music).
+The CLI rejects unverified Pond5 results rather than label them ad-safe.
+
+API references: [Pexels](https://www.pexels.com/api/documentation/),
+[Pixabay](https://pixabay.com/api/docs/). Pexels now documents
+`/v1/videos/search` and `/v1/videos/videos/{id}`.
+
 ## Image backend selection
 
 Set both `CODEX_LB_BASE_URL` and `CODEX_LB_API_KEY` to prefer your load balancer.
@@ -68,7 +118,8 @@ automatic; the image command does not need a `--provider` flag.
 
 ## Output contract
 
-`stdout` is a single JSON envelope:
+Generation verbs write a single JSON envelope to `stdout` (stock B-roll uses the
+array/download contracts above):
 
 ```json
 {"provider":"openai","endpoint":"/v1/images/generations","model":"gpt-image-2",

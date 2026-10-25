@@ -95,6 +95,7 @@ func Load() (*Loaded, error) {
 		}
 	}
 	out := &Loaded{Catalog: *snap, Origin: "snapshot", Allowlist: allow, Pins: pins}
+	defer out.addBrollRoutes()
 
 	raw, err := os.ReadFile(CachePath())
 	if err != nil {

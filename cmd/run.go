@@ -36,7 +36,7 @@ var transformOps = map[string]bool{
 func init() {
 	register(func(root *cobra.Command) {
 		for _, op := range registry.Ops {
-			if op == registry.OpOther {
+			if op == registry.OpOther || op == registry.OpBrollSearch || op == registry.OpBrollGet {
 				continue
 			}
 			root.AddCommand(newOpCmd(op))

@@ -45,6 +45,26 @@ ROUTER (v0.3+, preferred): op = what you make, family = model, provider = route.
     voice.tts   elevenlabs direct (--text, --param voice_id=...)   stt INPUT scribe-v2 elevenlabs (word timestamps)
     voice.dub INPUT --param language=es (elevenlabs only) · music/sfx/3d: quote first
 
+STOCK B-ROLL (free, no AI generation)
+  creative broll.search --query "old printing press" --provider pexels --table
+       [--orientation portrait|landscape|square] [--min-duration 5 --max-duration 30] [--limit 20]
+  creative broll.get pexels:12345 --out press.mp4
+  creative broll.get 125 --provider pixabay --quality 4k --out clip.mp4
+  Providers: pexels (PEXELS_API_KEY), pixabay (PIXABAY_API_KEY), pond5-pd (no key; unavailable).
+  No silent provider choice or fallback. Prefixed IDs infer the provider; conflicting flags fail.
+  Search: JSON array with licence/source/author URLs and cost_usd: 0; --table for human rows.
+  At most one API request per search; filters may return fewer results. Limit: Pexels 80, Pixabay 200.
+  Pixabay caches API responses for 24 hours under $XDG_CACHE_HOME/creative/broll (normally ~/.cache).
+  Quality: sd|hd|4k|best caps the longest edge at 960|1920|4096|unlimited pixels; default hd, never 4K.
+  Download: FILE + FILE.json provenance (licence, author, source/download URLs, selected dimensions,
+  duration, UTC fetched_at, SHA-256, attribution, last local query if known). Never overwrites either file.
+  get emits one JSON object; both commands keep normalized output with --raw.
+  Free stock is not automatic ad clearance: no implied endorsement or standalone resale.
+  Pond5 API returns HTTP 403; licence fields and download endpoint are unverified. No invented results.
+  Pond5 help limits Public Domain Project videos to editorial use, not ads:
+  https://www.pond5.com/help/en/articles/10086064-where-can-i-find-free-footage-photos-and-music
+  Pexels/Pixabay: fixture-tested; live verification needs their keys.
+
 LEGACY VERBS (v0.2, still work; prefer the router above):
 MENTAL MODEL
   Pick a verb by the ASSET you want out. Providers are an implementation detail
@@ -73,6 +93,7 @@ VERB CATALOG (default provider · required credential)
 
 CREDENTIALS  (resolved: env var first, then /run/secrets/<NAME>)
   OPENAI_API_KEY  CODEX_LB_API_KEY  SEGMIND_API_KEY  ELEVENLABS_API_KEY  FAL_KEY  ZAPCAP_API_KEY
+  PEXELS_API_KEY  PIXABAY_API_KEY
 
 IMAGE BACKENDS
   Set CODEX_LB_BASE_URL (including /v1) + CODEX_LB_API_KEY to prefer codex-lb.
@@ -83,7 +104,7 @@ IMAGE BACKENDS
   Missing key error format: "<NAME> missing; export it or provide /run/secrets/<NAME>".
 
 OUTPUT CONTRACT
-  stdout: one JSON object (the "envelope"): {provider, endpoint, request_id, model,
+  Generation stdout: one JSON object (the "envelope"): {provider, endpoint, request_id, model,
           input, output, usage, estimated_cost, elapsed_seconds, out}. --pretty to
           indent, --raw to emit the untouched provider payload instead.
   stderr: human progress (upload / queued / polling / done in Xs).

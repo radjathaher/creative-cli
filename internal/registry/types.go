@@ -50,6 +50,8 @@ const (
 	OpSTT           = "stt"
 	OpCaptionBurn   = "caption.burn"
 	OpTextChat      = "text.chat"
+	OpBrollSearch   = "broll.search"
+	OpBrollGet      = "broll.get"
 	OpOther         = "other"
 )
 
@@ -62,7 +64,7 @@ var Ops = []string{
 	OpMusicGenerate, OpMusicStems, OpMusicExtend, OpSFXGenerate, OpSFXFromVideo,
 	Op3DT2Mesh, Op3DI2Mesh, Op3DTexture, Op3DRig, Op3DAnimate, Op3DConvert,
 	OpUnderstandVid, OpUnderstandImg, OpUnderstandAud, OpSTT, OpCaptionBurn, OpTextChat,
-	OpOther,
+	OpBrollSearch, OpBrollGet, OpOther,
 }
 
 // Price sources, from most to least trustworthy. A route never disappears for
